@@ -1,7 +1,7 @@
-package apodviewer;
+package apodviewer.apod.unauth;
 
 
-import apodviewer.model.NasaApod;
+import apodviewer.apod.unauth.model.NasaApod;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;

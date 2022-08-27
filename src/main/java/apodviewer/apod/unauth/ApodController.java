@@ -1,6 +1,6 @@
-package apodviewer;
+package apodviewer.apod.unauth;
 
-import apodviewer.model.NasaApod;
+import apodviewer.apod.unauth.model.NasaApod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
