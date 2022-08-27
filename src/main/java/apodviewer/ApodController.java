@@ -1,32 +1,19 @@
 package apodviewer;
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import apodviewer.model.NasaApod;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
 
 @RestController
 public class ApodController {
+    @Autowired
+    private ApodService apodService;
 
-    @RequestMapping("/apod")
-    public String getApod() throws Exception {
-        URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuilder content = new StringBuilder();
-        while ((inputLine = br.readLine()) != null) {
-            content.append(inputLine);
-        }
-        br.close();
-
-        con.disconnect();
-
-        return content.toString();
+    @GetMapping("/apod")
+    public NasaApod getApod() throws IOException {
+        return apodService.getApod();
     }
 }
