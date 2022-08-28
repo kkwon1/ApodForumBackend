@@ -29,4 +29,19 @@ public class ApodController {
     public List<NasaApod> searchApod(@RequestParam String search) {
         return apodClient.searchApod(search);
     }
+
+    @GetMapping(value = "/apod", params = {"start_date"})
+    public List<NasaApod> getApodFrom(@RequestParam String startDate) {
+        return apodClient.getApodFrom(startDate);
+    }
+
+    @GetMapping(value = "/apod", params = {"start_date", "end_date"})
+    public List<NasaApod> getApodFromTo(@RequestParam String startDate, @RequestParam String endDate) {
+        return apodClient.getApodFromTo(startDate, endDate);
+    }
+
+    @GetMapping(value = "/apod", params = {"count"})
+    public List<NasaApod> getRandomApods(@RequestParam Integer count) {
+        return apodClient.getRandomApods(count);
+    }
 }

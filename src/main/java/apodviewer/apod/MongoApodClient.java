@@ -6,6 +6,7 @@ import com.mongodb.client.*;
 import org.bson.Document;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,21 +18,13 @@ public class MongoApodClient implements ApodClient {
 
     @Override
     public NasaApod getLatestApod() {
-        BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("date", "2022-08-14");
-        MongoCursor<Document> cursor = APOD_COLLECTION.find(searchQuery).cursor();
-
-        if (cursor.hasNext()) {
-            return convertDocumentToApod(cursor.next());
-        } else {
-            return NasaApod.builder().build();
-        }
+        return searchByDate(LocalDate.now());
     }
 
     @Override
     public NasaApod getApod(String date) {
         BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("date", date);
+        searchQuery.append("date", date);
         MongoCursor<Document> cursor = APOD_COLLECTION.find(searchQuery).cursor();
 
         if (cursor.hasNext()) {
@@ -59,7 +52,66 @@ public class MongoApodClient implements ApodClient {
 
     @Override
     public List<NasaApod> getApodFrom(String startDate) {
-        return null;
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.append("date", new BasicDBObject()
+                .append("$gte", startDate));
+
+        MongoCursor<Document> cursor = APOD_COLLECTION.find(searchQuery).cursor();
+
+        List<NasaApod> results = new ArrayList<>();
+        while (cursor.hasNext()) {
+            results.add(convertDocumentToApod(cursor.next()));
+        }
+
+        return results;
+    }
+
+    @Override
+    public List<NasaApod> getApodFromTo(String startDate, String endDate) {
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.append("date", new BasicDBObject()
+                .append("$gte", startDate)
+                .append("$lte", endDate));
+
+        MongoCursor<Document> cursor = APOD_COLLECTION.find(searchQuery).cursor();
+
+        List<NasaApod> results = new ArrayList<>();
+        while (cursor.hasNext()) {
+            results.add(convertDocumentToApod(cursor.next()));
+        }
+
+        return results;
+    }
+
+    @Override
+    public List<NasaApod> getRandomApods(Integer count) {
+        BasicDBObject randomSample = new BasicDBObject();
+        randomSample.append("$sample", new BasicDBObject()
+                .append("size", count));
+
+        MongoCursor<Document> cursor = APOD_COLLECTION.aggregate(List.of(randomSample)).cursor();
+
+        List<NasaApod> results = new ArrayList<>();
+        while (cursor.hasNext()) {
+            results.add(convertDocumentToApod(cursor.next()));
+        }
+
+        return results;
+    }
+
+    private NasaApod searchByDate(LocalDate date) {
+        BasicDBObject searchQuery = new BasicDBObject();
+
+        searchQuery.append("date", date.toString());
+
+        MongoCursor<Document> cursor = APOD_COLLECTION.find(searchQuery).cursor();
+
+        if (cursor.hasNext()) {
+            return convertDocumentToApod(cursor.next());
+        } else {
+            LocalDate previousDay = date.minusDays(1);
+            return searchByDate(previousDay);
+        }
     }
 
     private NasaApod convertDocumentToApod(Document document) {

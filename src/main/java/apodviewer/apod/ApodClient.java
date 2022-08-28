@@ -5,11 +5,15 @@ import apodviewer.apod.model.NasaApod;
 import java.util.List;
 
 public interface ApodClient {
-    public NasaApod getLatestApod();
+    NasaApod getLatestApod();
 
-    public NasaApod getApod(String date);
+    NasaApod getApod(String date);
 
-    public List<NasaApod> searchApod(String searchString);
+    List<NasaApod> searchApod(String searchString);
 
-    public List<NasaApod> getApodFrom(String startDate);
+    List<NasaApod> getApodFrom(String startDate);
+
+    List<NasaApod> getApodFromTo(String startDate, String endDate);
+
+    List<NasaApod> getRandomApods(Integer count);
 }
