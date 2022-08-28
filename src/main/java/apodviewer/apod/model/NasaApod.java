@@ -1,4 +1,4 @@
-package apodviewer.apod.unauth.model;
+package apodviewer.apod.model;
 
 import lombok.Builder;
 import lombok.Value;

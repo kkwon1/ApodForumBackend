@@ -1,7 +1,7 @@
-package apodviewer.apod.unauth;
+package apodviewer.apod.populator;
 
 
-import apodviewer.apod.unauth.model.NasaApod;
+import apodviewer.apod.model.NasaApod;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
@@ -41,6 +41,13 @@ public class ApodService {
 
     public List<NasaApod> getRandomApods() throws IOException {
         Call<List<NasaApod>> call = service.getRandomApods(NASA_API_KEY, 10);
+        Response<List<NasaApod>> response = call.execute();
+
+        return response.body();
+    }
+
+    public List<NasaApod> getApodFrom(String startDate) throws IOException {
+        Call<List<NasaApod>> call = service.getApodFrom(NASA_API_KEY, startDate);
         Response<List<NasaApod>> response = call.execute();
 
         return response.body();

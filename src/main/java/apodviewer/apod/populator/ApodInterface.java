@@ -1,6 +1,6 @@
-package apodviewer.apod.unauth;
+package apodviewer.apod.populator;
 
-import apodviewer.apod.unauth.model.NasaApod;
+import apodviewer.apod.model.NasaApod;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
