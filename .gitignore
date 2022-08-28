@@ -79,3 +79,5 @@ fabric.properties
 .idea/*
 .env
 target/*
+
+src/main/java/apodviewer/apod/populator/*
