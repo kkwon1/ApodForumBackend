@@ -1,13 +1,11 @@
 package apodviewer.apod;
 
-import apodviewer.apod.populator.ApodService;
 import apodviewer.apod.model.NasaApod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,13 +29,13 @@ public class ApodController {
     }
 
     @GetMapping(value = "/apod", params = {"start_date"})
-    public List<NasaApod> getApodFrom(@RequestParam String startDate) {
-        return apodClient.getApodFrom(startDate);
+    public List<NasaApod> getApodFrom(@RequestParam String start_date) {
+        return apodClient.getApodFrom(start_date);
     }
 
     @GetMapping(value = "/apod", params = {"start_date", "end_date"})
-    public List<NasaApod> getApodFromTo(@RequestParam String startDate, @RequestParam String endDate) {
-        return apodClient.getApodFromTo(startDate, endDate);
+    public List<NasaApod> getApodFromTo(@RequestParam String start_date, @RequestParam String end_date) {
+        return apodClient.getApodFromTo(start_date, end_date);
     }
 
     @GetMapping(value = "/apod", params = {"count"})
