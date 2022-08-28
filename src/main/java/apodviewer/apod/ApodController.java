@@ -10,35 +10,37 @@ import java.util.List;
 
 @RestController
 public class ApodController {
+    private static final String APOD_PATH = "/apod";
+
     @Autowired
     private ApodClient apodClient;
 
-    @GetMapping("/apod")
+    @GetMapping(APOD_PATH)
     public NasaApod getLatestApod() {
         return apodClient.getLatestApod();
     }
 
-    @GetMapping(value = "/apod", params = {"date"})
+    @GetMapping(value = APOD_PATH, params = {"date"})
     public NasaApod getApod(@RequestParam String date) {
         return apodClient.getApod(date);
     }
 
-    @GetMapping(value = "/apod", params = {"search"})
+    @GetMapping(value = APOD_PATH, params = {"search"})
     public List<NasaApod> searchApod(@RequestParam String search) {
         return apodClient.searchApod(search);
     }
 
-    @GetMapping(value = "/apod", params = {"start_date"})
+    @GetMapping(value = APOD_PATH, params = {"start_date"})
     public List<NasaApod> getApodFrom(@RequestParam String start_date) {
         return apodClient.getApodFrom(start_date);
     }
 
-    @GetMapping(value = "/apod", params = {"start_date", "end_date"})
+    @GetMapping(value = APOD_PATH, params = {"start_date", "end_date"})
     public List<NasaApod> getApodFromTo(@RequestParam String start_date, @RequestParam String end_date) {
         return apodClient.getApodFromTo(start_date, end_date);
     }
 
-    @GetMapping(value = "/apod", params = {"count"})
+    @GetMapping(value = APOD_PATH, params = {"count"})
     public List<NasaApod> getRandomApods(@RequestParam Integer count) {
         return apodClient.getRandomApods(count);
     }

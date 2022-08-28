@@ -1,4 +1,4 @@
-package apodviewer.apod;
+package apodviewer.apod.db;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -32,5 +32,10 @@ public class MongoConfiguration {
     @Bean
     public MongoCollection<Document> getMongoCollection(MongoDatabase mongoDatabase) {
         return mongoDatabase.getCollection(APOD_COLLECTION_NAME);
+    }
+
+    @Bean
+    public MongoConverter getMongoConverter() {
+        return new MongoConverter();
     }
 }

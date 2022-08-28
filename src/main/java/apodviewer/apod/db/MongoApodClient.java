@@ -1,5 +1,6 @@
-package apodviewer.apod;
+package apodviewer.apod.db;
 
+import apodviewer.apod.ApodClient;
 import apodviewer.apod.model.NasaApod;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
@@ -17,6 +18,9 @@ public class MongoApodClient implements ApodClient {
     @Autowired
     private MongoCollection<Document> apodCollection;
 
+    @Autowired
+    private MongoConverter mongoConverter;
+
     @Override
     public NasaApod getLatestApod() {
         return searchByDate(LocalDate.now());
@@ -29,7 +33,7 @@ public class MongoApodClient implements ApodClient {
         MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
         if (cursor.hasNext()) {
-            return convertDocumentToApod(cursor.next());
+            return mongoConverter.convertDocumentToApod(cursor.next());
         } else {
             return NasaApod.builder().build();
         }
@@ -42,7 +46,7 @@ public class MongoApodClient implements ApodClient {
 
         List<NasaApod> results = new ArrayList<>();
         while (cursor.hasNext()) {
-            NasaApod currentApod = convertDocumentToApod(cursor.next());
+            NasaApod currentApod = mongoConverter.convertDocumentToApod(cursor.next());
             if (currentApod.getExplanation().contains(searchString)) {
                 results.add(currentApod);
             }
@@ -59,12 +63,7 @@ public class MongoApodClient implements ApodClient {
 
         MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
-        List<NasaApod> results = new ArrayList<>();
-        while (cursor.hasNext()) {
-            results.add(convertDocumentToApod(cursor.next()));
-        }
-
-        return results;
+        return buildResults(cursor);
     }
 
     @Override
@@ -76,12 +75,7 @@ public class MongoApodClient implements ApodClient {
 
         MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
-        List<NasaApod> results = new ArrayList<>();
-        while (cursor.hasNext()) {
-            results.add(convertDocumentToApod(cursor.next()));
-        }
-
-        return results;
+        return buildResults(cursor);
     }
 
     @Override
@@ -91,13 +85,7 @@ public class MongoApodClient implements ApodClient {
                 .append("size", count));
 
         MongoCursor<Document> cursor = apodCollection.aggregate(List.of(randomSample)).cursor();
-
-        List<NasaApod> results = new ArrayList<>();
-        while (cursor.hasNext()) {
-            results.add(convertDocumentToApod(cursor.next()));
-        }
-
-        return results;
+        return buildResults(cursor);
     }
 
     private NasaApod searchByDate(LocalDate date) {
@@ -108,23 +96,19 @@ public class MongoApodClient implements ApodClient {
         MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
         if (cursor.hasNext()) {
-            return convertDocumentToApod(cursor.next());
+            return mongoConverter.convertDocumentToApod(cursor.next());
         } else {
             LocalDate previousDay = date.minusDays(1);
             return searchByDate(previousDay);
         }
     }
 
-    private NasaApod convertDocumentToApod(Document document) {
-        return NasaApod.builder()
-                .copyright(document.getString("copyright"))
-                .date(document.getString("date"))
-                .explanation(document.getString("explanation"))
-                .mediaType(document.getString("mediaType"))
-                .serviceVersion(document.getString("serviceVersion"))
-                .title(document.getString("title"))
-                .url(document.getString("url"))
-                .hdurl(document.getString("hdurl"))
-                .build();
+    private List<NasaApod> buildResults(MongoCursor<Document> cursor) {
+        List<NasaApod> results = new ArrayList<>();
+        while (cursor.hasNext()) {
+            results.add(mongoConverter.convertDocumentToApod(cursor.next()));
+        }
+
+        return results;
     }
 }
