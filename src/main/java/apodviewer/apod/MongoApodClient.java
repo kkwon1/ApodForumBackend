@@ -4,6 +4,7 @@ import apodviewer.apod.model.NasaApod;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -12,9 +13,9 @@ import java.util.List;
 
 @Component
 public class MongoApodClient implements ApodClient {
-    private static final MongoClient MONGO_CLIENT = MongoClients.create("mongodb://localhost:27017");
-    private static final MongoDatabase APOD_DATABASE = MONGO_CLIENT.getDatabase("apodDB");
-    private static final MongoCollection<Document> APOD_COLLECTION = APOD_DATABASE.getCollection("apod");
+
+    @Autowired
+    private MongoCollection<Document> apodCollection;
 
     @Override
     public NasaApod getLatestApod() {
@@ -25,7 +26,7 @@ public class MongoApodClient implements ApodClient {
     public NasaApod getApod(String date) {
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.append("date", date);
-        MongoCursor<Document> cursor = APOD_COLLECTION.find(searchQuery).cursor();
+        MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
         if (cursor.hasNext()) {
             return convertDocumentToApod(cursor.next());
@@ -36,7 +37,7 @@ public class MongoApodClient implements ApodClient {
 
     @Override
     public List<NasaApod> searchApod(String searchString) {
-        FindIterable<Document> iterable = APOD_COLLECTION.find();
+        FindIterable<Document> iterable = apodCollection.find();
         MongoCursor<Document> cursor = iterable.cursor();
 
         List<NasaApod> results = new ArrayList<>();
@@ -56,7 +57,7 @@ public class MongoApodClient implements ApodClient {
         searchQuery.append("date", new BasicDBObject()
                 .append("$gte", startDate));
 
-        MongoCursor<Document> cursor = APOD_COLLECTION.find(searchQuery).cursor();
+        MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
         List<NasaApod> results = new ArrayList<>();
         while (cursor.hasNext()) {
@@ -73,7 +74,7 @@ public class MongoApodClient implements ApodClient {
                 .append("$gte", startDate)
                 .append("$lte", endDate));
 
-        MongoCursor<Document> cursor = APOD_COLLECTION.find(searchQuery).cursor();
+        MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
         List<NasaApod> results = new ArrayList<>();
         while (cursor.hasNext()) {
@@ -89,7 +90,7 @@ public class MongoApodClient implements ApodClient {
         randomSample.append("$sample", new BasicDBObject()
                 .append("size", count));
 
-        MongoCursor<Document> cursor = APOD_COLLECTION.aggregate(List.of(randomSample)).cursor();
+        MongoCursor<Document> cursor = apodCollection.aggregate(List.of(randomSample)).cursor();
 
         List<NasaApod> results = new ArrayList<>();
         while (cursor.hasNext()) {
@@ -104,7 +105,7 @@ public class MongoApodClient implements ApodClient {
 
         searchQuery.append("date", date.toString());
 
-        MongoCursor<Document> cursor = APOD_COLLECTION.find(searchQuery).cursor();
+        MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
         if (cursor.hasNext()) {
             return convertDocumentToApod(cursor.next());
