@@ -8,12 +8,14 @@ import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class MongoCommentsClient implements CommentsClient {
 
     @Autowired

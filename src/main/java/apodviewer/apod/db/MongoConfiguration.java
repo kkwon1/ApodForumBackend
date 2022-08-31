@@ -1,16 +1,22 @@
 package apodviewer.apod.db;
 
 import apodviewer.comments.db.MongoCommentNodeConverter;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 @Configuration
 @ComponentScan
@@ -22,9 +28,16 @@ public class MongoConfiguration {
     private static final String APOD_COLLECTION_NAME = "apod";
     private static final String COMMENTS_COLLECTION_NAME = "comments";
 
+    CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+            fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+
     @Bean
     public MongoClient getMongoClient() {
-        return MongoClients.create(MONGO_ENDPOINT);
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .codecRegistry(pojoCodecRegistry)
+                .build();
+
+        return MongoClients.create(settings);
     }
 
     @Bean
