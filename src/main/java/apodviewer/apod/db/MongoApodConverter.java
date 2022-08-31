@@ -3,7 +3,7 @@ package apodviewer.apod.db;
 import apodviewer.apod.model.NasaApod;
 import org.bson.Document;
 
-public class MongoConverter {
+public class MongoApodConverter {
 
     public Document convertApodToDocument(NasaApod apod) {
         return new Document()

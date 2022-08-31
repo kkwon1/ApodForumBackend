@@ -1,5 +1,6 @@
 package apodviewer.apod;
 
+import apodviewer.apod.db.ApodClient;
 import apodviewer.apod.model.NasaApod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

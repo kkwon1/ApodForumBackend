@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class MongoConverterTest {
-    private final MongoConverter mongoConverter = new MongoConverter();
+    private final MongoApodConverter mongoApodConverter = new MongoApodConverter();
 
     @Test
     public void testConvertApodToDocument() {
@@ -21,7 +21,7 @@ public class MongoConverterTest {
                 .hdurl("testHdurl")
                 .build();
 
-        Document actualDocument = mongoConverter.convertApodToDocument(testNasaApod);
+        Document actualDocument = mongoApodConverter.convertApodToDocument(testNasaApod);
 
         Assert.assertEquals("testCopyright", actualDocument.get("copyright"));
         Assert.assertEquals("testExplanation", actualDocument.get("explanation"));

@@ -1,11 +1,11 @@
 package apodviewer.apod.db;
 
-import apodviewer.apod.ApodClient;
 import apodviewer.apod.model.NasaApod;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -16,10 +16,11 @@ import java.util.List;
 public class MongoApodClient implements ApodClient {
 
     @Autowired
+    @Qualifier("apodCollection")
     private MongoCollection<Document> apodCollection;
 
     @Autowired
-    private MongoConverter mongoConverter;
+    private MongoApodConverter mongoApodConverter;
 
     @Override
     public NasaApod getLatestApod() {
@@ -33,7 +34,7 @@ public class MongoApodClient implements ApodClient {
         MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
         if (cursor.hasNext()) {
-            return mongoConverter.convertDocumentToApod(cursor.next());
+            return mongoApodConverter.convertDocumentToApod(cursor.next());
         } else {
             return NasaApod.builder().build();
         }
@@ -46,7 +47,7 @@ public class MongoApodClient implements ApodClient {
 
         List<NasaApod> results = new ArrayList<>();
         while (cursor.hasNext()) {
-            NasaApod currentApod = mongoConverter.convertDocumentToApod(cursor.next());
+            NasaApod currentApod = mongoApodConverter.convertDocumentToApod(cursor.next());
             if (currentApod.getExplanation().contains(searchString)) {
                 results.add(currentApod);
             }
@@ -96,7 +97,7 @@ public class MongoApodClient implements ApodClient {
         MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
         if (cursor.hasNext()) {
-            return mongoConverter.convertDocumentToApod(cursor.next());
+            return mongoApodConverter.convertDocumentToApod(cursor.next());
         } else {
             LocalDate previousDay = date.minusDays(1);
             return searchByDate(previousDay);
@@ -106,7 +107,7 @@ public class MongoApodClient implements ApodClient {
     private List<NasaApod> buildResults(MongoCursor<Document> cursor) {
         List<NasaApod> results = new ArrayList<>();
         while (cursor.hasNext()) {
-            results.add(mongoConverter.convertDocumentToApod(cursor.next()));
+            results.add(mongoApodConverter.convertDocumentToApod(cursor.next()));
         }
 
         return results;

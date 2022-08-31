@@ -1,4 +1,4 @@
-package apodviewer.apod;
+package apodviewer.apod.db;
 
 import apodviewer.apod.model.NasaApod;
 
