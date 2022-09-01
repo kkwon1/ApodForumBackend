@@ -1,7 +1,7 @@
 package apodviewer.comments.db;
 
-import apodviewer.apod.model.NasaApod;
-import apodviewer.comments.model.CommentNode;
+import apodviewer.comments.model.CommentPointerNode;
+import apodviewer.comments.model.CommentTreeNode;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,31 +26,49 @@ public class MongoCommentsClient implements CommentsClient {
     private MongoCommentNodeConverter mongoCommentNodeConverter;
 
     @Override
-    public List<CommentNode> getComments(String postId) {
-        // TODO: implement
-        return List.of();
+    public CommentTreeNode getAllComments(String postId) {
+        BasicDBObject findQuery = new BasicDBObject("commentId", postId);
+
+        MongoCursor<Document> cursor = commentsCollection.find(findQuery).cursor();
+        CommentPointerNode ptrRootNode = mongoCommentNodeConverter.convertDocumentToCommentPointerNode(cursor.next());
+
+        CommentTreeNode rootNode = mongoCommentNodeConverter.convertPointerNodeToTreeNode(ptrRootNode);
+        getComments(rootNode);
+        return rootNode;
     }
 
     @Override
-    public void addComment(String parentCommentId, String commentText) {
-        // 1. First create a new comment entry using UUID
-        // 2. Then find parent entry and update the children node by appending new UUID
-
+    public String addComment(String parentCommentId, String commentText) {
         String newCommentId = UUID.randomUUID().toString();
-        CommentNode newComment = CommentNode.builder()
+        CommentPointerNode newComment = CommentPointerNode.builder()
                 .commentId(newCommentId)
                 .comment(commentText)
                 .createDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
-                .childrenNodes(List.of())
+                .parentId(parentCommentId)
                 .build();
 
         commentsCollection.insertOne(mongoCommentNodeConverter.convertCommentNodeToDocument(newComment));
 
-        BasicDBObject findQuery = new BasicDBObject("commentId", parentCommentId);
-        BasicDBObject pushQuery = new BasicDBObject("$push",
-                new BasicDBObject("children", newComment));
+        return newComment.getCommentId();
+    }
 
-        commentsCollection.updateOne(findQuery, pushQuery);
+    private CommentTreeNode getComments(CommentTreeNode root) {
+        BasicDBObject findQuery = new BasicDBObject("parentId", root.getCommentId());
+        MongoCursor<Document> cursor = commentsCollection.find(findQuery).cursor();
+
+        List<CommentTreeNode> children = new ArrayList<>();
+        while (cursor.hasNext()) {
+            children.add(mongoCommentNodeConverter.convertDocumentToCommentTreeNode(cursor.next()));
+        }
+
+        if (children.isEmpty()) {
+            return root;
+        } else {
+            root.setChildren(children);
+            children.forEach(this::getComments);
+        }
+
+        return root;
     }
 }

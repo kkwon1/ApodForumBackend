@@ -1,6 +1,7 @@
 package apodviewer.apod.db;
 
 import apodviewer.comments.db.MongoCommentNodeConverter;
+import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -35,6 +36,7 @@ public class MongoConfiguration {
     public MongoClient getMongoClient() {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .codecRegistry(pojoCodecRegistry)
+                .applyConnectionString(new ConnectionString(MONGO_ENDPOINT))
                 .build();
 
         return MongoClients.create(settings);

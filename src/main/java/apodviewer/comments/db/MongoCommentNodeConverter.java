@@ -1,30 +1,52 @@
 package apodviewer.comments.db;
 
-import apodviewer.comments.model.CommentNode;
+import apodviewer.comments.model.CommentPointerNode;
+import apodviewer.comments.model.CommentTreeNode;
 import org.bson.Document;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 public class MongoCommentNodeConverter {
 
-    public Document convertCommentNodeToDocument(CommentNode commentNode) {
+    public Document convertCommentNodeToDocument(CommentPointerNode commentNode) {
         return new Document()
             .append("commentId", commentNode.getCommentId())
             .append("comment", commentNode.getComment())
-            .append("children", commentNode.getChildrenNodes())
+            .append("parentId", commentNode.getParentId())
             .append("createDate", commentNode.getCreateDate())
             .append("modifiedDate", commentNode.getModifiedDate());
     }
 
-    public CommentNode convertDocumentToCommentNode(Document document) {
-        return CommentNode.builder()
+    public CommentPointerNode convertDocumentToCommentPointerNode(Document document) {
+        return CommentPointerNode.builder()
                 .commentId(document.getString("commentId"))
-                .childrenNodes(document.getList("children", CommentNode.class))
+                .parentId(document.getString("parentId"))
                 .comment(document.getString("comment"))
                 .createDate(convertToLocalDateTimeViaInstant(document.getDate("createDate")))
                 .modifiedDate(convertToLocalDateTimeViaInstant(document.getDate("modifiedDate")))
+                .build();
+    }
+
+    public CommentTreeNode convertDocumentToCommentTreeNode(Document document) {
+        return CommentTreeNode.builder()
+                .commentId(document.getString("commentId"))
+                .children(List.of())
+                .comment(document.getString("comment"))
+                .createDate(convertToLocalDateTimeViaInstant(document.getDate("createDate")))
+                .modifiedDate(convertToLocalDateTimeViaInstant(document.getDate("modifiedDate")))
+                .build();
+    }
+
+    public CommentTreeNode convertPointerNodeToTreeNode(CommentPointerNode ptrNode) {
+        return CommentTreeNode.builder()
+                .commentId(ptrNode.getCommentId())
+                .children(List.of())
+                .comment(ptrNode.getComment())
+                .createDate(ptrNode.getCreateDate())
+                .modifiedDate(ptrNode.getModifiedDate())
                 .build();
     }
 

@@ -1,11 +1,9 @@
 package apodviewer.comments.db;
 
-import apodviewer.comments.model.CommentNode;
-
-import java.util.List;
+import apodviewer.comments.model.CommentTreeNode;
 
 public interface CommentsClient {
-    List<CommentNode> getComments(String postId);
+    CommentTreeNode getAllComments(String postId);
 
-    void addComment(String parentCommentId, String commentText);
+    String addComment(String parentCommentId, String commentText);
 }
