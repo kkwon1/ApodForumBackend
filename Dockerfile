@@ -2,7 +2,7 @@ FROM openjdk:11
 
 WORKDIR /app
 
-COPY /home/circleci/project/target/APODViewer-1.0-SNAPSHOT.jar ./
+#COPY /home/circleci/project/target/APODViewer-1.0-SNAPSHOT.jar ./
 
 EXPOSE 8083
 
