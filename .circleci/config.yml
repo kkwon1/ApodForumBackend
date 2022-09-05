@@ -6,28 +6,33 @@ orbs:
 
 jobs:
   build:
+
+    working_directory: /application
+
     docker:
       - image: openjdk:14
 
-    working_directory: /tmp
     steps:
-      - checkout
-      - run:
-          name:  Assemble JAR
-          command: |
-            echo "my artifact file" > /tmp/artifact-1;
-            mkdir /tmp/artifacts;
-            echo "my artifact files in a dir" > /tmp/artifacts/artifact-2;
-      - store_artifacts:
-          path: out/artifacts
+      - checkout # check out source code to working directory
+
+      - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
+          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          key: application-{{ checksum "pom.xml" }}
+
+      - run: mvn dependency:go-offline # gets the project dependencies
+        -
+      - run: mvn package # run the actual tests
+
+      - store_artifacts: # store the uberjar as an artifact
+          # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: target/demo-java-spring-0.0.1-SNAPSHOT.jar
 
 workflows:
-  maven_test:
-    jobs:
-      - maven/test
-  build_and_push_image:
+  kevin_test:
     jobs:
       - build
+  build_and_push_image:
+    jobs:
       - aws-ecr/build-and-push-image:
           create-repo: true
           aws-access-key-id: AWS_ACCESS_KEY_ID
