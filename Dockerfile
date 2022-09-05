@@ -6,7 +6,7 @@ WORKDIR /application
 COPY out/artifacts/APODViewer_jar/APODViewer.jar ./
 
 # Copy hidden environment file
-COPY ./.env ./
+# COPY ./.env ./
 
 EXPOSE 8082
 
