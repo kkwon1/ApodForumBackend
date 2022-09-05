@@ -3,11 +3,11 @@ FROM openjdk:14
 WORKDIR /application
 
 # Copy jar file
-COPY out/artifacts/APODViewer_jar/APODViewer.jar ./
+COPY target/APODViewer-1.0-SNAPSHOT.jar ./
 
 # Copy hidden environment file
 # COPY ./.env ./
 
 EXPOSE 8082
 
-CMD ["java", "-jar", "APODViewer.jar"]
+CMD ["java", "-jar", "APODViewer-1.0-SNAPSHOT.jar"]

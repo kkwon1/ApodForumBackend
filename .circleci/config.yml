@@ -32,6 +32,8 @@ workflows:
     jobs:
       - build
       - aws-ecr/build-and-push-image:
+          requires:
+            - build
           create-repo: true
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-cli-version: latest
