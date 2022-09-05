@@ -22,6 +22,8 @@ public class Main {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/apod").allowedOrigins(ALLOWED_ORIGIN);
+                registry.addMapping("/post").allowedOrigins(ALLOWED_ORIGIN);
+                registry.addMapping("/comments").allowedOrigins(ALLOWED_ORIGIN);
             }
         };
     }
