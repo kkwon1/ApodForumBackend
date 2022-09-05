@@ -1,30 +1,34 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@8.1.0 # Use the AWS ECR orb in your configuration
+  aws-ecr: circleci/aws-ecr@8.1.0
+  maven: circleci/maven@1.3.0
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  build:
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: openjdk:14
+
+    working_directory: /tmp
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name:  Assemble JAR
+          command: |
+            echo "my artifact file" > /tmp/artifact-1;
+            mkdir /tmp/artifacts;
+            echo "my artifact files in a dir" > /tmp/artifacts/artifact-2;
+      - store_artifacts:
+          path: out/artifacts
 
 workflows:
+  maven_test:
+    jobs:
+      - maven/test
   build_and_push_image:
     jobs:
-      - aws-ecr/build-and-push-image: # Use the pre-defined `build-and-push-image` job
+      - build
+      - aws-ecr/build-and-push-image:
           create-repo: true
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-cli-version: latest
