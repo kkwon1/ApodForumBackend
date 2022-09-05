@@ -6,9 +6,6 @@ orbs:
 
 jobs:
   build_and_deploy:
-
-    working_directory: /application
-
     docker:
       - image: circleci/openjdk:11-jdk
 
