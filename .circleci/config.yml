@@ -25,14 +25,12 @@ jobs:
 
       - store_artifacts: # store the uberjar as an artifact
           # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: target/demo-java-spring-0.0.1-SNAPSHOT.jar
+          path: target/APODViewer-1.0-SNAPSHOT.jar
 
 workflows:
-  kevin_test:
-    jobs:
-      - build
   build_and_push_image:
     jobs:
+      - build
       - aws-ecr/build-and-push-image:
           create-repo: true
           aws-access-key-id: AWS_ACCESS_KEY_ID
