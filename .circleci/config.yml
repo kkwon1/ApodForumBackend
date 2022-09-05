@@ -3,7 +3,7 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@8.1.2 # Use the AWS ECR orb in your configuration
+  aws-ecr: circleci/aws-ecr@8.1.0 # Use the AWS ECR orb in your configuration
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
