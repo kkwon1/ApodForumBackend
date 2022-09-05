@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Push image
           command: |
-            eval $(aws ecr get-login --region .us-west-2 --no-include-email)
+            eval $(aws ecr get-login --region us-west-2 --no-include-email)
             docker push $FULL_IMAGE_NAME
 
 workflows:
