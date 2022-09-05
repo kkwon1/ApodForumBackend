@@ -7,7 +7,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -22,8 +21,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 @Configuration
 @ComponentScan
 public class MongoConfiguration {
-    private static final Dotenv DOTENV = Dotenv.load();
-    private static final String MONGO_ENDPOINT = DOTENV.get("MONGO_ENDPOINT");
+    private static final String MONGO_ENDPOINT = System.getenv("MONGO_ENDPOINT");
 
     private static final String APOD_DB_NAME = "apodDB";
     private static final String APOD_COLLECTION_NAME = "apod";
@@ -33,7 +31,7 @@ public class MongoConfiguration {
             fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
     @Bean
-    public MongoClient getMongoClient() {
+    public MongoClient getMongoClient() throws Exception {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .codecRegistry(pojoCodecRegistry)
                 .applyConnectionString(new ConnectionString(MONGO_ENDPOINT))
