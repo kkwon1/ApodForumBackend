@@ -25,8 +25,6 @@ workflows:
   build_and_push_image:
     jobs:
       - aws-ecr/build-and-push-image: # Use the pre-defined `build-and-push-image` job
-          dockerfile: Dockerfile
-          path: ../Dockerfile
           create-repo: true
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-cli-version: latest
