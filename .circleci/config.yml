@@ -2,6 +2,9 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+orbs:
+  aws-ecr: circleci/aws-ecr@8.1.2 # Use the AWS ECR orb in your configuration
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -18,9 +21,16 @@ jobs:
           name: "Say hello"
           command: "echo Hello, World!"
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build_and_push_image:
     jobs:
-      - say-hello
+      - aws-ecr/build-and-push-image: # Use the pre-defined `build-and-push-image` job
+          dockerfile: Dockerfile
+          path: ../Dockerfile
+          profile-name: <my-profile-name>
+          repo: <my-ECR-repo>
+          tag: <my-ECR-repo-tag> # default - latest
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-cli-version: latest
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: us-west-2

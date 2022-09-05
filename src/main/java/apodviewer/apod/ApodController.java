@@ -16,6 +16,11 @@ public class ApodController {
     @Autowired
     private ApodClient apodClient;
 
+    @GetMapping("/helloWorld")
+    public String getHelloWorld() {
+        return "HelloWorld";
+    }
+
     @GetMapping(APOD_PATH)
     public NasaApod getLatestApod() {
         return apodClient.getLatestApod();
