@@ -5,40 +5,46 @@ orbs:
   maven: circleci/maven@1.3.0
 
 jobs:
-  build:
+  build_and_deploy:
 
     working_directory: /application
 
     docker:
-      - image: adoptopenjdk/maven-openjdk11
+      - image: circleci/openjdk:11-jdk
 
     steps:
       - checkout # check out source code to working directory
-
-      - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-          key: application-{{ checksum "pom.xml" }}
+      - setup_remote_docker
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export ECR_REPOSITORY_NAME="kevin-repo"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="005751055304.dkr.ecr.us-west-2.amazonaws.com/${ECR_REPOSITORY_NAME}:latest"' >> $BASH_ENV
 
       - run: mvn dependency:go-offline # gets the project dependencies
 
       - run: mvn package # run the actual tests
 
-      - store_artifacts: # store the uberjar as an artifact
-          # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: target/APODViewer-1.0-SNAPSHOT.jar
+      - run:
+          name: Install dependencies for AWS
+          command: |
+            sudo apt-get update
+            sudo apt-get -y -qq install awscli
+            sudo apt-get install python3-pip
+            sudo pip3 install --upgrade awscli
+
+      - run:
+          name: Build image
+          command: |
+            docker build -t $FULL_IMAGE_NAME .
+
+      - run:
+          name: Push image
+          command: |
+            eval $(aws ecr get-login --region .us-west-2 --no-include-email)
+            docker push $FULL_IMAGE_NAME
 
 workflows:
   build_and_push_image:
     jobs:
-      - build
-      - aws-ecr/build-and-push-image:
-          requires:
-            - build
-          create-repo: true
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-cli-version: latest
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          region: "us-west-2"
-          executor: aws-ecr/default
-          registry-id: AWS_ECR_REGISTRY_ID
-          repo: "kevin-repo"
+      - build_and_deploy
