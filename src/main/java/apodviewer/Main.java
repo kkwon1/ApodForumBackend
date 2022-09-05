@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import static apodviewer.EnvironmentVariables.ALLOWED_ORIGIN;
+import static apodviewer.EnvironmentVariables.initializeEnvironmentVariables;
+
 @SpringBootApplication
 public class Main {
-    private static final String ALLOWED_ORIGIN = System.getenv("ALLOWED_ORIGIN");
-
     public static void main(String[] args) {
+        initializeEnvironmentVariables();
         SpringApplication.run(Main.class, args);
     }
 

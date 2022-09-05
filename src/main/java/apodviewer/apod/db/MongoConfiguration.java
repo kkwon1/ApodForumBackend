@@ -15,14 +15,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import static apodviewer.EnvironmentVariables.MONGO_ENDPOINT;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 @Configuration
 @ComponentScan
 public class MongoConfiguration {
-    private static final String MONGO_ENDPOINT = System.getenv("MONGO_ENDPOINT");
-
     private static final String APOD_DB_NAME = "apodDB";
     private static final String APOD_COLLECTION_NAME = "apod";
     private static final String COMMENTS_COLLECTION_NAME = "comments";
