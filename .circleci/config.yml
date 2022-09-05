@@ -33,3 +33,5 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
           executor: aws-ecr/default
+          registry-id: AWS_ECR_REGISTRY_ID
+          repo: KevinRepo
