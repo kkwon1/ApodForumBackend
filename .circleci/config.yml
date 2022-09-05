@@ -34,4 +34,4 @@ workflows:
           region: "us-west-2"
           executor: aws-ecr/default
           registry-id: AWS_ECR_REGISTRY_ID
-          repo: KevinRepo
+          repo: "kevin-repo"
