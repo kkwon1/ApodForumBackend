@@ -20,7 +20,7 @@ jobs:
           key: application-{{ checksum "pom.xml" }}
 
       - run: mvn dependency:go-offline # gets the project dependencies
-        -
+
       - run: mvn package # run the actual tests
 
       - store_artifacts: # store the uberjar as an artifact
