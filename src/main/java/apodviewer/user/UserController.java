@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    @GetMapping(value = "/apodviewer/user", params = {"user_id"})
+    @GetMapping(value = "/user", params = {"user_id"})
     public User getUserInformation(@RequestParam String user_id) {
         // TODO: implement
         // return User likes

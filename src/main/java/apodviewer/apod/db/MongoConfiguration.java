@@ -23,8 +23,8 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 @ComponentScan
 public class MongoConfiguration {
     private static final String APOD_DB_NAME = "apodDB";
-    private static final String APOD_COLLECTION_NAME = "apodviewer/apod";
-    private static final String COMMENTS_COLLECTION_NAME = "apodviewer/comments";
+    private static final String APOD_COLLECTION_NAME = "apod";
+    private static final String COMMENTS_COLLECTION_NAME = "comments";
 
     CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
             fromProviders(PojoCodecProvider.builder().automatic(true).build()));

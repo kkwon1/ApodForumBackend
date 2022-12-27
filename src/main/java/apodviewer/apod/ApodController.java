@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 public class ApodController {
-    private static final String APOD_PATH = "/apodviewer/apod";
+    private static final String APOD_PATH = "/apod";
 
     @Autowired
     private ApodClient apodClient;

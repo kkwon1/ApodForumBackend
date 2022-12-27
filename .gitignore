@@ -80,4 +80,4 @@ fabric.properties
 .env
 target/*
 
-src/apodviewer/apod/populator/*
+src/main/java/apodviewer/apod/populator/*

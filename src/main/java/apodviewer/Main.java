@@ -21,9 +21,9 @@ public class Main {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/apodviewer/apod").allowedOrigins(ALLOWED_ORIGIN);
+                registry.addMapping("/apod").allowedOrigins(ALLOWED_ORIGIN);
                 registry.addMapping("/post").allowedOrigins(ALLOWED_ORIGIN);
-                registry.addMapping("/apodviewer/comments").allowedOrigins(ALLOWED_ORIGIN);
+                registry.addMapping("/comments").allowedOrigins(ALLOWED_ORIGIN);
             }
         };
     }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CommentsController {
-    private static final String COMMENTS_PATH = "/apodviewer/comments";
+    private static final String COMMENTS_PATH = "/comments";
 
     @Autowired
     private CommentsClient commentsClient;
