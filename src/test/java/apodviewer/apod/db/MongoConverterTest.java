@@ -12,7 +12,7 @@ public class MongoConverterTest {
     public void testConvertApodToDocument() {
         NasaApod testNasaApod = NasaApod.builder()
                 .copyright("testCopyright")
-                .explanation("testExplanation")
+                .description("testDescription")
                 .serviceVersion("testServiceVersion")
                 .date("testDate")
                 .title("testTitle")
@@ -24,7 +24,7 @@ public class MongoConverterTest {
         Document actualDocument = mongoApodConverter.convertApodToDocument(testNasaApod);
 
         Assert.assertEquals("testCopyright", actualDocument.get("copyright"));
-        Assert.assertEquals("testExplanation", actualDocument.get("explanation"));
+        Assert.assertEquals("testDescription", actualDocument.get("description"));
         Assert.assertEquals("testServiceVersion", actualDocument.get("serviceVersion"));
         Assert.assertEquals("testDate", actualDocument.get("date"));
         Assert.assertEquals("testTitle", actualDocument.get("title"));

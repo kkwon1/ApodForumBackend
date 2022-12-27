@@ -48,7 +48,7 @@ public class MongoApodClient implements ApodClient {
         List<NasaApod> results = new ArrayList<>();
         while (cursor.hasNext()) {
             NasaApod currentApod = mongoApodConverter.convertDocumentToApod(cursor.next());
-            if (currentApod.getExplanation().contains(searchString)) {
+            if (currentApod.getDescription().contains(searchString)) {
                 results.add(currentApod);
             }
         }
