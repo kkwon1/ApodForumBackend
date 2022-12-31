@@ -37,12 +37,42 @@ async function insertApod(apod) {
     })
 }
 
+async function initializeComment() {
+    return new Promise((resolve) => {
+        let mongoEndpoint = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@apodmongodb.9po0nwz.mongodb.net/?retryWrites=true&w=majority`;
+        let client = new MongoClient(mongoEndpoint);
+        console.log("Connected to Mongo")
+
+        let apodDb = client.db("apodDB");
+        console.log("Apod DB: " + apodDb)
+
+        let commentsCollection = apodDb.collection("comments");
+
+        // Get a date like '2022-12-31'
+        let now = new Date();
+        let todayDate = now.toISOString().slice(0, 10);
+        let initialComment = {
+            commentId: todayDate,
+            comment: null,
+            parentId: null,
+            createDate: now,
+            modifiedDate: now
+        };
+
+        let result = commentsCollection.insertOne(initialComment);
+        resolve(result);
+    })
+}
+
 
 export const handler = async (event) => {
   let apod = await getNasaApod();
 
   let result = await insertApod(apod);
 
+  console.log(result);
+
+  result = await initializeComment();
   console.log(result);
 
   const response = {
