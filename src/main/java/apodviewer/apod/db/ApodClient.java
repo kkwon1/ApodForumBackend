@@ -5,7 +5,7 @@ import apodviewer.apod.model.NasaApod;
 import java.util.List;
 
 public interface ApodClient {
-    NasaApod getLatestApod();
+    List<NasaApod> getLatestApods();
 
     NasaApod getApod(String date);
 

@@ -15,6 +15,8 @@ import java.util.List;
 @Component
 public class MongoApodClient implements ApodClient {
 
+    private static final int APOD_COUNT = 30;
+
     @Autowired
     @Qualifier("apodCollection")
     private MongoCollection<Document> apodCollection;
@@ -23,8 +25,10 @@ public class MongoApodClient implements ApodClient {
     private MongoApodConverter mongoApodConverter;
 
     @Override
-    public NasaApod getLatestApod() {
-        return searchByDate(LocalDate.now());
+    public List<NasaApod> getLatestApods() {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = today.minusDays(APOD_COUNT - 1);
+        return getApodFrom(startDate.toString());
     }
 
     @Override

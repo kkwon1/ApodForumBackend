@@ -17,8 +17,8 @@ public class ApodController {
     private ApodClient apodClient;
 
     @GetMapping(APOD_PATH)
-    public NasaApod getLatestApod() {
-        return apodClient.getLatestApod();
+    public List<NasaApod> getLatestApods() {
+        return apodClient.getLatestApods();
     }
 
     @GetMapping(value = APOD_PATH, params = {"date"})
