@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static apodviewer.EnvironmentVariables.ALLOWED_ORIGIN;
-import static apodviewer.EnvironmentVariables.initializeEnvironmentVariables;
+import static apodviewer.EnvironmentVariables.*;
 
 @SpringBootApplication
 public class Main {
+
+    private static final String COMMA_DELIMITER = ",";
+
     public static void main(String[] args) {
         initializeEnvironmentVariables();
         SpringApplication.run(Main.class, args);
@@ -21,9 +23,9 @@ public class Main {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/apod").allowedOrigins(ALLOWED_ORIGIN);
-                registry.addMapping("/post").allowedOrigins(ALLOWED_ORIGIN);
-                registry.addMapping("/comments").allowedOrigins(ALLOWED_ORIGIN);
+                registry.addMapping("/apod").allowedOrigins(ALLOWED_ORIGINS.split(COMMA_DELIMITER));
+                registry.addMapping("/post").allowedOrigins(ALLOWED_ORIGINS.split(COMMA_DELIMITER));
+                registry.addMapping("/comments").allowedOrigins(ALLOWED_ORIGINS.split(COMMA_DELIMITER));
             }
         };
     }

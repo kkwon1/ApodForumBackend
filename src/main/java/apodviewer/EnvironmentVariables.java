@@ -4,7 +4,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class EnvironmentVariables {
     public static String MONGO_ENDPOINT;
-    public static String ALLOWED_ORIGIN;
+    // Comma separated string of origins
+    public static String ALLOWED_ORIGINS;
     public static String NASA_API_KEY;
 
     public static void initializeEnvironmentVariables() {
@@ -14,10 +15,10 @@ public class EnvironmentVariables {
             MONGO_ENDPOINT = dotenv.get("MONGO_ENDPOINT");
         }
 
-        ALLOWED_ORIGIN = System.getenv("ALLOWED_ORIGIN");
-        if (ALLOWED_ORIGIN == null || ALLOWED_ORIGIN.isBlank()) {
+        ALLOWED_ORIGINS = System.getenv("ALLOWED_ORIGINS");
+        if (ALLOWED_ORIGINS == null || ALLOWED_ORIGINS.isBlank()) {
             Dotenv dotenv = Dotenv.load();
-            ALLOWED_ORIGIN = dotenv.get("ALLOWED_ORIGIN");
+            ALLOWED_ORIGINS = dotenv.get("ALLOWED_ORIGINS");
         }
 
         NASA_API_KEY = System.getenv("NASA_API_KEY");
