@@ -1,9 +1,14 @@
 package apodviewer.apod.db;
 
 import apodviewer.apod.model.NasaApod;
+import apodviewer.comments.util.CommentHelper;
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class MongoApodConverter {
+
+    @Autowired
+    private CommentHelper commentHelper;
 
     public Document convertApodToDocument(NasaApod apod) {
         return new Document()
@@ -18,6 +23,8 @@ public class MongoApodConverter {
     }
 
     public NasaApod convertDocumentToApod(Document document) {
+        String postId = document.getString("date");
+        int numComments = commentHelper.getCommentCount(postId);
         return NasaApod.builder()
                 .copyright(document.getString("copyright"))
                 .date(document.getString("date"))
@@ -27,6 +34,7 @@ public class MongoApodConverter {
                 .title(document.getString("title"))
                 .url(document.getString("url"))
                 .hdurl(document.getString("hdurl"))
+                .commentCount(numComments)
                 .build();
     }
 }
