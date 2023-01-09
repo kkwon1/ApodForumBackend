@@ -16,7 +16,7 @@ public class CommentsController {
 
     @PostMapping(path = COMMENTS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String addComment(@RequestBody CommentPointerNode commentNode) {
-        return commentsClient.addComment(commentNode.getCommentId(), commentNode.getComment());
+        return commentsClient.addComment(commentNode.getCommentId(), commentNode.getComment(), commentNode.getAuthor());
     }
 
     @GetMapping(path = COMMENTS_PATH, params = {"post_id"})

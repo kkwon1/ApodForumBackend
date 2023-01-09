@@ -38,7 +38,7 @@ public class MongoCommentsClient implements CommentsClient {
     }
 
     @Override
-    public String addComment(String parentCommentId, String commentText) {
+    public String addComment(String parentCommentId, String commentText, String author) {
         String newCommentId = UUID.randomUUID().toString();
         CommentPointerNode newComment = CommentPointerNode.builder()
                 .commentId(newCommentId)
@@ -46,6 +46,7 @@ public class MongoCommentsClient implements CommentsClient {
                 .createDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
                 .parentId(parentCommentId)
+                .author(author)
                 .build();
 
         commentsCollection.insertOne(mongoCommentNodeConverter.convertCommentNodeToDocument(newComment));

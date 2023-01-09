@@ -20,4 +20,5 @@ public class CommentPointerNode {
     LocalDateTime createDate;
     LocalDateTime modifiedDate;
     String comment;
+    String author;
 }

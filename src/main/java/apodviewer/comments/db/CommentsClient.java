@@ -5,5 +5,5 @@ import apodviewer.comments.model.CommentTreeNode;
 public interface CommentsClient {
     CommentTreeNode getAllComments(String postId);
 
-    String addComment(String parentCommentId, String commentText);
+    String addComment(String parentCommentId, String commentText, String author);
 }
