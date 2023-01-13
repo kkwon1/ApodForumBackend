@@ -1,6 +1,9 @@
 package apodviewer.apod.db;
 
+import apodviewer.apod.model.NasaApod;
 import apodviewer.comments.db.MongoCommentNodeConverter;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -14,6 +17,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static apodviewer.EnvironmentVariables.MONGO_ENDPOINT;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -64,5 +70,13 @@ public class MongoConfiguration {
     @Bean
     public MongoCommentNodeConverter getMongoCommentNodeConverter() {
         return new MongoCommentNodeConverter();
+    }
+
+    @Bean
+    @Qualifier("apodCache")
+    public Cache<String, List<NasaApod>> getApodCache() {
+        return CacheBuilder.newBuilder()
+                .expireAfterWrite(1, TimeUnit.DAYS)
+                .build();
     }
 }

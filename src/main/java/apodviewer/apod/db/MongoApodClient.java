@@ -1,6 +1,7 @@
 package apodviewer.apod.db;
 
 import apodviewer.apod.model.NasaApod;
+import com.google.common.cache.Cache;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import org.bson.Document;
@@ -24,11 +25,21 @@ public class MongoApodClient implements ApodClient {
     @Autowired
     private MongoApodConverter mongoApodConverter;
 
+    @Autowired
+    @Qualifier("apodCache")
+    private Cache<String, List<NasaApod>> apodCache;
+
     @Override
     public List<NasaApod> getLatestApods() {
         LocalDate today = LocalDate.now();
         LocalDate startDate = today.minusDays(APOD_COUNT - 1);
-        return getApodFrom(startDate.toString());
+        if (apodCache.getIfPresent(startDate.toString()) != null) {
+            return apodCache.getIfPresent(startDate.toString());
+        } else {
+            List<NasaApod> result = getApodFrom(startDate.toString());
+            apodCache.put(startDate.toString(), result);
+            return result;
+        }
     }
 
     @Override
