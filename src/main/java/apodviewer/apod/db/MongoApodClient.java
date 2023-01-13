@@ -26,18 +26,22 @@ public class MongoApodClient implements ApodClient {
     private MongoApodConverter mongoApodConverter;
 
     @Autowired
-    @Qualifier("apodCache")
-    private Cache<String, List<NasaApod>> apodCache;
+    @Qualifier("apodListCache")
+    private Cache<String, List<NasaApod>> apodListCache;
+
+    @Autowired
+    @Qualifier("apodPostCache")
+    private Cache<String, NasaApod> apodPostCache;
 
     @Override
     public List<NasaApod> getLatestApods() {
         LocalDate today = LocalDate.now();
         LocalDate startDate = today.minusDays(APOD_COUNT - 1);
-        if (apodCache.getIfPresent(startDate.toString()) != null) {
-            return apodCache.getIfPresent(startDate.toString());
+        if (apodListCache.getIfPresent(startDate.toString()) != null) {
+            return apodListCache.getIfPresent(startDate.toString());
         } else {
             List<NasaApod> result = getApodFrom(startDate.toString());
-            apodCache.put(startDate.toString(), result);
+            apodListCache.put(startDate.toString(), result);
             return result;
         }
     }
@@ -49,7 +53,13 @@ public class MongoApodClient implements ApodClient {
         MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
         if (cursor.hasNext()) {
-            return mongoApodConverter.convertDocumentToApod(cursor.next());
+            if (apodPostCache.getIfPresent(date) != null) {
+                return apodPostCache.getIfPresent(date);
+            } else {
+                NasaApod apod = mongoApodConverter.convertDocumentToApod(cursor.next());
+                apodPostCache.put(date, apod);
+                return apod;
+            }
         } else {
             return NasaApod.builder().build();
         }
