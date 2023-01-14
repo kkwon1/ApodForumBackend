@@ -9,7 +9,7 @@ public class NasaApod {
     String copyright;
     String postId;
     String date;
-    String description;
+    String explanation;
     String mediaType;
     String serviceVersion;
     String title;
