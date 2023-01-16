@@ -17,8 +17,8 @@ public class ApodController {
     private ApodClient apodClient;
 
     @GetMapping(APOD_PATH)
-    public List<NasaApod> getLatestApods() {
-        return apodClient.getLatestApods();
+    public NasaApod getRandomApod() {
+        return apodClient.getRandomApod();
     }
 
     @GetMapping(value = APOD_PATH, params = {"offset", "limit"})

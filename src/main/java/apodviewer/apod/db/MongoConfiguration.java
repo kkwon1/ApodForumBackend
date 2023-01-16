@@ -1,5 +1,6 @@
 package apodviewer.apod.db;
 
+import apodviewer.apod.cache.ApodCacheWrapper;
 import apodviewer.apod.model.NasaApod;
 import apodviewer.comments.db.MongoCommentNodeConverter;
 import com.google.common.cache.Cache;
@@ -86,5 +87,10 @@ public class MongoConfiguration {
         return CacheBuilder.newBuilder()
                 .expireAfterWrite(3, TimeUnit.HOURS)
                 .build();
+    }
+
+    @Bean
+    public ApodCacheWrapper getApodCacheWrapper() {
+        return new ApodCacheWrapper();
     }
 }

@@ -5,7 +5,7 @@ import apodviewer.apod.model.NasaApod;
 import java.util.List;
 
 public interface ApodClient {
-    List<NasaApod> getLatestApods();
+    NasaApod getRandomApod();
 
     List<NasaApod> getApodPage(String offset, String limit);
 
