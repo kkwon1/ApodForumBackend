@@ -44,7 +44,7 @@ public class MongoApodClient implements ApodClient {
         int offsetVal = Integer.parseInt(offset);
         int limitVal = Integer.parseInt(limit);
 
-        LocalDate today = LocalDate.now(ZoneId.of("PST"));
+        LocalDate today = LocalDate.now(ZoneId.of("America/Los_Angeles"));
 
         LocalDate endDate = today.minusDays(offsetVal);
         LocalDate startDate = endDate.minusDays(limitVal - 1);
