@@ -49,8 +49,10 @@ public class MongoApodClient implements ApodClient {
         LocalDate startDate = endDate.minusDays(limitVal - 1);
 
         if (apodCacheWrapper.containsApodList(startDate, endDate)) {
+            System.out.println("Cache hit from " + startDate + " to " + endDate);
             return apodCacheWrapper.getApodList(startDate, endDate);
         } else {
+            System.out.println("Cache missed from " + startDate + " to " + endDate);
             return getApodFromTo(startDate.toString(), endDate.toString());
         }
     }
@@ -148,6 +150,7 @@ public class MongoApodClient implements ApodClient {
         while (cursor.hasNext()) {
             NasaApod apod = mongoApodConverter.convertDocumentToApod(cursor.next());
             apodCacheWrapper.addToCache(apod);
+            System.out.println("Added APOD date " + apod.getDate() + " to Cache");
             results.add(apod);
         }
 

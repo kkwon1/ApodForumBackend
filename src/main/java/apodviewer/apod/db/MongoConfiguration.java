@@ -74,14 +74,6 @@ public class MongoConfiguration {
     }
 
     @Bean
-    @Qualifier("apodListCache")
-    public Cache<String, List<NasaApod>> getApodListCache() {
-        return CacheBuilder.newBuilder()
-                .expireAfterWrite(1, TimeUnit.DAYS)
-                .build();
-    }
-
-    @Bean
     @Qualifier("apodPostCache")
     public Cache<String, NasaApod> getApodPostCache() {
         return CacheBuilder.newBuilder()
