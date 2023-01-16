@@ -84,7 +84,7 @@ public class MongoConfiguration {
     @Qualifier("apodPostCache")
     public Cache<String, NasaApod> getApodPostCache() {
         return CacheBuilder.newBuilder()
-                .expireAfterWrite(3, TimeUnit.DAYS)
+                .expireAfterWrite(3, TimeUnit.HOURS)
                 .build();
     }
 }
