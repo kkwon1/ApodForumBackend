@@ -7,6 +7,8 @@ import java.util.List;
 public interface ApodClient {
     List<NasaApod> getLatestApods();
 
+    List<NasaApod> getApodPage(String offset, String limit);
+
     NasaApod getApod(String date);
 
     List<NasaApod> searchApod(String searchString);

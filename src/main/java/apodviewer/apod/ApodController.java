@@ -21,6 +21,9 @@ public class ApodController {
         return apodClient.getLatestApods();
     }
 
+    @GetMapping(value = APOD_PATH, params = {"offset", "limit"})
+    public List<NasaApod> getApodPage(@RequestParam String offset, @RequestParam String limit) {return apodClient.getApodPage(offset, limit);}
+
     @GetMapping(value = APOD_PATH, params = {"date"})
     public NasaApod getApod(@RequestParam String date) {
         return apodClient.getApod(date);

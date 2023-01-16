@@ -47,6 +47,19 @@ public class MongoApodClient implements ApodClient {
     }
 
     @Override
+    public List<NasaApod> getApodPage(String offset, String limit) {
+        int offsetVal = Integer.parseInt(offset);
+        int limitVal = Integer.parseInt(limit);
+
+        LocalDate today = LocalDate.now();
+        // End Date should be
+        LocalDate endDate = today.minusDays(offsetVal);
+        LocalDate startDate = endDate.minusDays(limitVal - 1);
+
+        return getApodFromTo(startDate.toString(), endDate.toString());
+    }
+
+    @Override
     public NasaApod getApod(String date) {
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.append("date", date);
@@ -92,6 +105,13 @@ public class MongoApodClient implements ApodClient {
         return buildResults(cursor);
     }
 
+    /**
+     * Return all APOD entries for a given range of date inclusive
+     *
+     * @param startDate - StartDate represented in String format yyyy-mm-dd
+     * @param endDate - EndDate represented in String format yyyy-mm-dd
+     * @return
+     */
     @Override
     public List<NasaApod> getApodFromTo(String startDate, String endDate) {
         BasicDBObject searchQuery = new BasicDBObject();
