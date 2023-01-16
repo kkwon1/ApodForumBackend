@@ -90,7 +90,9 @@ public class MongoConfiguration {
     }
 
     @Bean
-    public ApodCacheWrapper getApodCacheWrapper() {
-        return new ApodCacheWrapper();
+    public ApodCacheWrapper getApodCacheWrapper(Cache<String, NasaApod> apodPostCache) {
+        return ApodCacheWrapper.builder()
+                .apodPostCache(apodPostCache)
+                .build();
     }
 }

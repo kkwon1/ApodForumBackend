@@ -2,6 +2,7 @@ package apodviewer.apod.cache;
 
 import apodviewer.apod.model.NasaApod;
 import com.google.common.cache.Cache;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Builder
 public class ApodCacheWrapper {
 
     @Autowired
@@ -25,7 +27,7 @@ public class ApodCacheWrapper {
         List<LocalDate> allDates = new ArrayList<>();
         LocalDate tempDate = startDate;
         while(!tempDate.isAfter(endDate)) {
-            allDates.add(startDate);
+            allDates.add(tempDate);
             tempDate = tempDate.plusDays(1);
         }
 

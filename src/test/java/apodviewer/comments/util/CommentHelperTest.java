@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class CommentHelperTest {
 
     @Mock
-    public CommentsClient mockCommentsClient;
+    private CommentsClient mockCommentsClient;
 
     private CommentHelper commentHelper;
 
