@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class MongoApodClient implements ApodClient {
         int offsetVal = Integer.parseInt(offset);
         int limitVal = Integer.parseInt(limit);
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("PST"));
 
         LocalDate endDate = today.minusDays(offsetVal);
         LocalDate startDate = endDate.minusDays(limitVal - 1);
