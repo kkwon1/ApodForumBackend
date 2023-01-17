@@ -1,7 +1,7 @@
 package apodviewer.apod.db;
 
-import apodviewer.apod.cache.ApodCacheWrapper;
 import apodviewer.apod.model.NasaApod;
+import com.google.common.cache.Cache;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import org.bson.Document;
@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static com.mongodb.client.model.Aggregates.sample;
 
@@ -26,17 +27,21 @@ public class MongoApodClient implements ApodClient {
     private MongoCollection<Document> apodCollection;
 
     @Autowired
-    private MongoApodConverter mongoApodConverter;
+    @Qualifier("apodPostCache")
+    private Cache<String, NasaApod> apodPostCache;
 
     @Autowired
-    private ApodCacheWrapper apodCacheWrapper;
+    private MongoApodConverter mongoApodConverter;
 
     @Override
     public NasaApod getRandomApod() {
-        return apodCollection.aggregate(List.of(sample(1)))
+        NasaApod apod = apodCollection.aggregate(List.of(sample(1)))
                 .map(document -> mongoApodConverter.convertDocumentToApod(document))
                 .cursor()
                 .next();
+
+        apodPostCache.put(apod.getDate(), apod);
+        return apod;
     }
 
     @Override
@@ -49,13 +54,13 @@ public class MongoApodClient implements ApodClient {
         LocalDate endDate = today.minusDays(offsetVal);
         LocalDate startDate = endDate.minusDays(limitVal - 1);
 
-        if (apodCacheWrapper.containsApodList(startDate, endDate)) {
-            System.out.println("Cache hit from " + startDate + " to " + endDate);
-            return apodCacheWrapper.getApodList(startDate, endDate);
-        } else {
-            System.out.println("Cache missed from " + startDate + " to " + endDate);
-            return getApodFromTo(startDate.toString(), endDate.toString());
+        List<NasaApod> results = new ArrayList<>();
+        for(LocalDate i = startDate; !i.isAfter(endDate); i = i.plusDays(1)) {
+            NasaApod apod = getApodFromCache(i.toString());
+            results.add(apod);
         }
+
+        return results;
     }
 
     @Override
@@ -64,14 +69,15 @@ public class MongoApodClient implements ApodClient {
         searchQuery.append("date", date);
         MongoCursor<Document> cursor = apodCollection.find(searchQuery).cursor();
 
-        if (apodCacheWrapper.containsApod(date)) {
-            return apodCacheWrapper.getApod(date);
-        } else {
+        NasaApod apod = apodPostCache.getIfPresent(date);
+        if (apod == null) {
             if (cursor.hasNext()) {
                 return mongoApodConverter.convertDocumentToApod(cursor.next());
             } else {
                 return NasaApod.builder().build();
             }
+        } else {
+            return apod;
         }
     }
 
@@ -150,11 +156,21 @@ public class MongoApodClient implements ApodClient {
         List<NasaApod> results = new ArrayList<>();
         while (cursor.hasNext()) {
             NasaApod apod = mongoApodConverter.convertDocumentToApod(cursor.next());
-            apodCacheWrapper.addToCache(apod);
-            System.out.println("Added APOD date " + apod.getDate() + " to Cache");
             results.add(apod);
         }
 
         return results;
+    }
+
+    private NasaApod getApodFromCache(String date) {
+        try {
+            NasaApod apod = apodPostCache.get(date, () -> getApod(date));
+            apodPostCache.put(date, apod);
+            return apod;
+        } catch (ExecutionException e) {
+            System.out.println("Failed to retrieve APOD for date " + date + " " + e);
+        }
+
+        return NasaApod.builder().build();
     }
 }

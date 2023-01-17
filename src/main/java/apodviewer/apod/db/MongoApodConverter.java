@@ -23,8 +23,12 @@ public class MongoApodConverter {
     }
 
     public NasaApod convertDocumentToApod(Document document) {
-        String postId = document.getString("date");
-        int numComments = commentHelper.getCommentCount(postId);
+//        String postId = document.getString("date");
+//        int numComments = commentHelper.getCommentCount(postId);
+        int numComments = 0;
+        try {
+            numComments = document.getInteger("numComments");
+        } catch (NullPointerException ignored) {}
         return NasaApod.builder()
                 .copyright(document.getString("copyright"))
                 .date(document.getString("date"))

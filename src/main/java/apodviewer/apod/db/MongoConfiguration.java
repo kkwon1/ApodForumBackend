@@ -1,6 +1,5 @@
 package apodviewer.apod.db;
 
-import apodviewer.apod.cache.ApodCacheWrapper;
 import apodviewer.apod.model.NasaApod;
 import apodviewer.comments.db.MongoCommentNodeConverter;
 import com.google.common.cache.Cache;
@@ -19,7 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static apodviewer.EnvironmentVariables.MONGO_ENDPOINT;
@@ -78,13 +76,6 @@ public class MongoConfiguration {
     public Cache<String, NasaApod> getApodPostCache() {
         return CacheBuilder.newBuilder()
                 .expireAfterWrite(3, TimeUnit.HOURS)
-                .build();
-    }
-
-    @Bean
-    public ApodCacheWrapper getApodCacheWrapper(Cache<String, NasaApod> apodPostCache) {
-        return ApodCacheWrapper.builder()
-                .apodPostCache(apodPostCache)
                 .build();
     }
 }
