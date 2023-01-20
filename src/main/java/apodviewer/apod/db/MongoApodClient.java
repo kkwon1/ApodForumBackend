@@ -58,7 +58,7 @@ public class MongoApodClient implements ApodClient {
             return getAllApodFromCache(startDate, endDate);
         }
 
-        return getApodFrom(startDate.toString());
+        return getApodFromTo(startDate.toString(), endDate.toString());
     }
 
     @Override
