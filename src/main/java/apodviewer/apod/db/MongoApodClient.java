@@ -54,13 +54,11 @@ public class MongoApodClient implements ApodClient {
         LocalDate endDate = today.minusDays(offsetVal);
         LocalDate startDate = endDate.minusDays(limitVal - 1);
 
-        List<NasaApod> results = new ArrayList<>();
-        for(LocalDate i = startDate; !i.isAfter(endDate); i = i.plusDays(1)) {
-            NasaApod apod = getApodFromCache(i.toString());
-            results.add(apod);
+        if (allApodInCache(startDate, endDate)) {
+            return getAllApodFromCache(startDate, endDate);
         }
 
-        return results;
+        return getApodFrom(startDate.toString());
     }
 
     @Override
@@ -172,5 +170,23 @@ public class MongoApodClient implements ApodClient {
         }
 
         return NasaApod.builder().build();
+    }
+
+    private boolean allApodInCache(LocalDate startDate, LocalDate endDate) {
+        for(LocalDate i = startDate; !i.isAfter(endDate); i = i.plusDays(1)) {
+            if (apodPostCache.getIfPresent(i.toString()) == null) return false;
+        }
+
+        return true;
+    }
+
+    private List<NasaApod> getAllApodFromCache(LocalDate startDate, LocalDate endDate) {
+        List<NasaApod> results = new ArrayList<>();
+        for(LocalDate i = startDate; !i.isAfter(endDate); i = i.plusDays(1)) {
+            NasaApod apod = getApodFromCache(i.toString());
+            results.add(apod);
+        }
+
+        return results;
     }
 }
