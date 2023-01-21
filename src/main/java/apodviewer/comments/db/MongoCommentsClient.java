@@ -1,5 +1,6 @@
 package apodviewer.comments.db;
 
+import apodviewer.comments.model.AddCommentRequest;
 import apodviewer.comments.model.CommentPointerNode;
 import apodviewer.comments.model.CommentTreeNode;
 import com.mongodb.BasicDBObject;
@@ -38,15 +39,15 @@ public class MongoCommentsClient implements CommentsClient {
     }
 
     @Override
-    public String addComment(String parentCommentId, String commentText, String author) {
+    public String addComment(AddCommentRequest addCommentRequest) {
         String newCommentId = UUID.randomUUID().toString();
         CommentPointerNode newComment = CommentPointerNode.builder()
                 .commentId(newCommentId)
-                .comment(commentText)
+                .comment(addCommentRequest.getComment())
                 .createDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
-                .parentId(parentCommentId)
-                .author(author)
+                .parentCommentId(addCommentRequest.getParentCommentId())
+                .author(addCommentRequest.getAuthor())
                 .build();
 
         commentsCollection.insertOne(mongoCommentNodeConverter.convertCommentNodeToDocument(newComment));

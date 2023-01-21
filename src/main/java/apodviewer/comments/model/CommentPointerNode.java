@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Value
 public class CommentPointerNode {
     String commentId;
-    String parentId;
+    String parentCommentId;
     LocalDateTime createDate;
     LocalDateTime modifiedDate;
     String comment;

@@ -6,7 +6,9 @@ import lombok.Value;
 @Value
 @Builder
 public class User {
-    String userId;
+    String userSub;
     String userName;
     String email;
+    boolean emailVerified;
+    String profilePictureUrl;
 }

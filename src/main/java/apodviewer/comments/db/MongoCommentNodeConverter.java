@@ -15,7 +15,7 @@ public class MongoCommentNodeConverter {
         return new Document()
             .append("commentId", commentNode.getCommentId())
             .append("comment", commentNode.getComment())
-            .append("parentId", commentNode.getParentId())
+            .append("parentId", commentNode.getParentCommentId())
             .append("createDate", commentNode.getCreateDate())
             .append("modifiedDate", commentNode.getModifiedDate())
             .append("author", commentNode.getAuthor());
@@ -24,7 +24,7 @@ public class MongoCommentNodeConverter {
     public CommentPointerNode convertDocumentToCommentPointerNode(Document document) {
         return CommentPointerNode.builder()
                 .commentId(document.getString("commentId"))
-                .parentId(document.getString("parentId"))
+                .parentCommentId(document.getString("parentId"))
                 .comment(document.getString("comment"))
                 .createDate(convertToLocalDateTimeViaInstant(document.getDate("createDate")))
                 .modifiedDate(convertToLocalDateTimeViaInstant(document.getDate("modifiedDate")))
