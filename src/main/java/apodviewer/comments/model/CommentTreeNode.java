@@ -19,4 +19,5 @@ public class CommentTreeNode {
     LocalDateTime modifiedDate;
     String comment;
     String author;
+    Boolean isDeleted;
 }

@@ -18,7 +18,8 @@ public class MongoCommentNodeConverter {
             .append("parentId", commentNode.getParentCommentId())
             .append("createDate", commentNode.getCreateDate())
             .append("modifiedDate", commentNode.getModifiedDate())
-            .append("author", commentNode.getAuthor());
+            .append("author", commentNode.getAuthor())
+            .append("isDeleted", commentNode.getIsDeleted());
     }
 
     public CommentPointerNode convertDocumentToCommentPointerNode(Document document) {
@@ -29,6 +30,7 @@ public class MongoCommentNodeConverter {
                 .createDate(convertToLocalDateTimeViaInstant(document.getDate("createDate")))
                 .modifiedDate(convertToLocalDateTimeViaInstant(document.getDate("modifiedDate")))
                 .author(document.getString("author"))
+                .isDeleted(document.getBoolean("isDeleted"))
                 .build();
     }
 
@@ -40,6 +42,7 @@ public class MongoCommentNodeConverter {
                 .createDate(convertToLocalDateTimeViaInstant(document.getDate("createDate")))
                 .modifiedDate(convertToLocalDateTimeViaInstant(document.getDate("modifiedDate")))
                 .author(document.getString("author"))
+                .isDeleted(document.getBoolean("isDeleted"))
                 .build();
     }
 
@@ -51,6 +54,7 @@ public class MongoCommentNodeConverter {
                 .createDate(ptrNode.getCreateDate())
                 .modifiedDate(ptrNode.getModifiedDate())
                 .author(ptrNode.getAuthor())
+                .isDeleted(ptrNode.getIsDeleted())
                 .build();
     }
 

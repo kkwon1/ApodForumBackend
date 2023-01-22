@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 
 /**
  * The data structure used to store comments within the DB.
+ *
+ * A single CommentPointerNode represents a single Comment document in the DB
+ *
  * Each comment node will have its info and the parent node. This allows us to query based on the parent ID
  * and it will return all the children of given parent. This allows us to build the TreeNode Top Down.
  *
@@ -21,4 +24,5 @@ public class CommentPointerNode {
     LocalDateTime modifiedDate;
     String comment;
     String author;
+    Boolean isDeleted;
 }

@@ -26,7 +26,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .mvcMatchers("/apod").permitAll()
                 .mvcMatchers("/post").permitAll()
-                .mvcMatchers("/comments").authenticated()
+                .mvcMatchers("/comment").authenticated()
                 .and().cors()
                 .and().oauth2ResourceServer().jwt();
         return http.build();

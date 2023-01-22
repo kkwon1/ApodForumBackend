@@ -25,7 +25,8 @@ public class Main {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/apod").allowedOrigins(ALLOWED_ORIGINS.split(COMMA_DELIMITER));
                 registry.addMapping("/post").allowedOrigins(ALLOWED_ORIGINS.split(COMMA_DELIMITER));
-                registry.addMapping("/comments").allowedOrigins(ALLOWED_ORIGINS.split(COMMA_DELIMITER));
+                registry.addMapping("/comment/add").allowedOrigins(ALLOWED_ORIGINS.split(COMMA_DELIMITER));
+                registry.addMapping("/comment/delete").allowedOrigins(ALLOWED_ORIGINS.split(COMMA_DELIMITER));
             }
         };
     }
