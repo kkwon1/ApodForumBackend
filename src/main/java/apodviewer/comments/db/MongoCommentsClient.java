@@ -71,7 +71,7 @@ public class MongoCommentsClient implements CommentsClient {
     }
 
     @Override
-    public String addComment(AddCommentRequest addCommentRequest) {
+    public CommentPointerNode addComment(AddCommentRequest addCommentRequest) {
         String newCommentId = UUID.randomUUID().toString();
         CommentPointerNode newComment = CommentPointerNode.builder()
                 .commentId(newCommentId)
@@ -80,6 +80,7 @@ public class MongoCommentsClient implements CommentsClient {
                 .modifiedDate(LocalDateTime.now())
                 .parentCommentId(addCommentRequest.getParentCommentId())
                 .author(addCommentRequest.getAuthor())
+                .isDeleted(false)
                 .build();
 
         // Insert the comment into comment DB
@@ -92,7 +93,7 @@ public class MongoCommentsClient implements CommentsClient {
 
         apodCollection.updateOne(query, updates, options);
 
-        return newComment.getCommentId();
+        return newComment;
     }
 
     private CommentTreeNode getComments(CommentTreeNode root) {
