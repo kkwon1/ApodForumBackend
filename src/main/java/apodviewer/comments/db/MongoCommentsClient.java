@@ -30,6 +30,10 @@ public class MongoCommentsClient implements CommentsClient {
     private MongoCollection<Document> commentsCollection;
 
     @Autowired
+    @Qualifier("apodCollection")
+    private MongoCollection<Document> apodCollection;
+
+    @Autowired
     private MongoCommentNodeConverter mongoCommentNodeConverter;
 
     @Override
@@ -78,7 +82,15 @@ public class MongoCommentsClient implements CommentsClient {
                 .author(addCommentRequest.getAuthor())
                 .build();
 
+        // Insert the comment into comment DB
         commentsCollection.insertOne(mongoCommentNodeConverter.convertCommentNodeToDocument(newComment));
+
+        // Update comment count for the APOD
+        Bson query = eq("date", addCommentRequest.getPostId());
+        Bson updates = Updates.inc("commentCount", 1);
+        UpdateOptions options = new UpdateOptions().upsert(true);
+
+        apodCollection.updateOne(query, updates, options);
 
         return newComment.getCommentId();
     }
