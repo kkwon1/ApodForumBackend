@@ -3,7 +3,6 @@ package apodviewer.posts;
 import apodviewer.apod.client.ApodClient;
 import apodviewer.apod.model.NasaApod;
 import apodviewer.comments.client.CommentsClient;
-import apodviewer.comments.db.CommentsDao;
 import apodviewer.comments.model.CommentTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
