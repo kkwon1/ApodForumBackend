@@ -1,6 +1,5 @@
 package apodviewer.comments;
 
-import apodviewer.apod.model.NasaApod;
 import apodviewer.comments.model.CommentTree;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

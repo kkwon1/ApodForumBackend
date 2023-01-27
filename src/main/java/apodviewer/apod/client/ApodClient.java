@@ -3,7 +3,6 @@ package apodviewer.apod.client;
 import apodviewer.apod.model.NasaApod;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public interface ApodClient {
     NasaApod getRandomApod();
