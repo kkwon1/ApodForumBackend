@@ -1,6 +1,6 @@
 package apodviewer.posts;
 
-import apodviewer.apod.db.ApodClient;
+import apodviewer.apod.client.ApodClient;
 import apodviewer.apod.model.NasaApod;
 import apodviewer.comments.db.CommentsClient;
 import apodviewer.comments.model.CommentTreeNode;

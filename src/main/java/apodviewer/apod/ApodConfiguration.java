@@ -1,5 +1,7 @@
-package apodviewer.apod.db;
+package apodviewer.apod;
 
+import apodviewer.apod.db.MongoApodConverter;
+import apodviewer.apod.db.MongoApodDao;
 import apodviewer.apod.model.NasaApod;
 import apodviewer.comments.db.MongoCommentNodeConverter;
 import com.google.common.cache.Cache;
@@ -26,7 +28,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 @Configuration
 @ComponentScan
-public class MongoConfiguration {
+public class ApodConfiguration {
     private static final String APOD_DB_NAME = "apodDB";
     private static final String APOD_COLLECTION_NAME = "apod";
     private static final String COMMENTS_COLLECTION_NAME = "comments";

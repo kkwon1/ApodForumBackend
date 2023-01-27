@@ -1,4 +1,4 @@
-package apodviewer.apod.db;
+package apodviewer.apod.client;
 
 import apodviewer.apod.model.NasaApod;
 
@@ -10,13 +10,11 @@ public interface ApodClient {
 
     List<NasaApod> getApodPage(String offset, String limit);
 
-    NasaApod getApod(String date);
+    NasaApod getApod(String postId);
 
     List<NasaApod> searchApod(String searchString);
 
-    List<NasaApod> getApodFrom(String startDate);
-
-    List<NasaApod> getApodFromTo(String startDate, String endDate);
-
     List<NasaApod> getRandomApods(Integer count);
+
+    void addCommentToPost(String postId);
 }
