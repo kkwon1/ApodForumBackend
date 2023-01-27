@@ -20,4 +20,5 @@ public class CommentTree {
     String comment;
     String author;
     Boolean isDeleted;
+    Boolean isLeaf;
 }

@@ -76,6 +76,11 @@ public class MongoCommentsDao implements CommentsDao {
         }
 
         root.setChildren(children);
-        children.forEach(this::populateCommentWithChildren);
+        children.stream().filter(this::hasChildren)
+                .forEach(this::populateCommentWithChildren);
+    }
+
+    private boolean hasChildren(CommentTree node) {
+        return node.getIsLeaf() != null && node.getIsLeaf();
     }
 }

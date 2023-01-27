@@ -19,7 +19,8 @@ public class MongoCommentNodeConverter {
             .append("createDate", comment.getCreateDate())
             .append("modifiedDate", comment.getModifiedDate())
             .append("author", comment.getAuthor())
-            .append("isDeleted", comment.getIsDeleted());
+            .append("isDeleted", comment.getIsDeleted())
+            .append("isLeaf", comment.getIsLeaf());
     }
 
     public Comment convertDocumentToComment(Document document) {
@@ -31,6 +32,7 @@ public class MongoCommentNodeConverter {
                 .modifiedDate(convertToLocalDateTimeViaInstant(document.getDate("modifiedDate")))
                 .author(document.getString("author"))
                 .isDeleted(document.getBoolean("isDeleted"))
+                .isLeaf(document.getBoolean("isLeaf"))
                 .build();
     }
 
@@ -43,6 +45,7 @@ public class MongoCommentNodeConverter {
                 .modifiedDate(convertToLocalDateTimeViaInstant(document.getDate("modifiedDate")))
                 .author(document.getString("author"))
                 .isDeleted(document.getBoolean("isDeleted"))
+                .isLeaf(document.getBoolean("isLeaf"))
                 .build();
     }
 
@@ -55,6 +58,7 @@ public class MongoCommentNodeConverter {
                 .modifiedDate(comment.getModifiedDate())
                 .author(comment.getAuthor())
                 .isDeleted(comment.getIsDeleted())
+                .isLeaf(comment.getIsLeaf())
                 .build();
     }
 

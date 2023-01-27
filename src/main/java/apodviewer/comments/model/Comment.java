@@ -25,4 +25,5 @@ public class Comment {
     String commentText;
     String author;
     Boolean isDeleted;
+    Boolean isLeaf;
 }
