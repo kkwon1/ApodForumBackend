@@ -5,8 +5,10 @@ import apodviewer.comments.model.AddCommentRequest;
 import apodviewer.comments.model.Comment;
 import apodviewer.comments.model.CommentTree;
 import apodviewer.comments.model.DeleteCommentRequest;
+import com.google.common.cache.Cache;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -18,11 +20,22 @@ public class CommentsClientImpl implements CommentsClient {
     @Autowired
     private CommentsDao commentsDao;
 
-    // TODO: Implement cache
+    @Autowired
+    @Qualifier("commentsCache")
+    private Cache<String, CommentTree> commentTreeCache;
+
     // TODO consider optimizing comment storage for faster retrieval
 
     @Override
     public CommentTree getPostComments(String postId) {
+        try {
+            CommentTree commentTree = commentTreeCache.get(postId, () -> commentsDao.getPostComments(postId));
+            commentTreeCache.put(postId, commentTree);
+            return commentTree;
+        } catch (Exception e) {
+            System.out.println("Failed to retrieve Comments for PostId " + postId + " " + e);
+        }
+
         return commentsDao.getPostComments(postId);
     }
 
@@ -38,7 +51,6 @@ public class CommentsClientImpl implements CommentsClient {
                 .author(addCommentRequest.getAuthor())
                 .isDeleted(false)
                 .build();
-
 
         commentsDao.addComment(newComment);
         return newComment;

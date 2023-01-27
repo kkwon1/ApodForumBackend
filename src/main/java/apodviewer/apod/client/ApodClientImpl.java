@@ -86,7 +86,7 @@ public class ApodClientImpl implements ApodClient {
             System.out.println("Failed to retrieve APOD for date " + date + " " + e);
         }
 
-        return NasaApod.builder().build();
+        return getApod(date);
     }
 
     private boolean allApodInCache(LocalDate startDate, LocalDate endDate) {

@@ -29,38 +29,12 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 @Configuration
 @ComponentScan
 public class ApodConfiguration {
-    private static final String APOD_DB_NAME = "apodDB";
     private static final String APOD_COLLECTION_NAME = "apod";
-    private static final String COMMENTS_COLLECTION_NAME = "comments";
-
-    CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
-            fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-
-    @Bean
-    public MongoClient getMongoClient() throws Exception {
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .codecRegistry(pojoCodecRegistry)
-                .applyConnectionString(new ConnectionString(MONGO_ENDPOINT))
-                .build();
-
-        return MongoClients.create(settings);
-    }
-
-    @Bean
-    public MongoDatabase getMongoDatabase(MongoClient mongoClient) {
-        return mongoClient.getDatabase(APOD_DB_NAME);
-    }
 
     @Bean
     @Qualifier("apodCollection")
     public MongoCollection<Document> getApodCollection(MongoDatabase mongoDatabase) {
         return mongoDatabase.getCollection(APOD_COLLECTION_NAME);
-    }
-
-    @Bean
-    @Qualifier("commentsCollection")
-    public MongoCollection<Document> getCommentsCollection(MongoDatabase mongoDatabase) {
-        return mongoDatabase.getCollection(COMMENTS_COLLECTION_NAME);
     }
 
     @Bean
