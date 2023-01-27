@@ -17,12 +17,12 @@ import java.time.LocalDateTime;
  */
 @Builder
 @Value
-public class CommentPointerNode {
+public class Comment {
     String commentId;
     String parentCommentId;
     LocalDateTime createDate;
     LocalDateTime modifiedDate;
-    String comment;
+    String commentText;
     String author;
     Boolean isDeleted;
 }

@@ -12,9 +12,9 @@ import java.util.List;
  */
 @Builder
 @Data
-public class CommentTreeNode {
+public class CommentTree {
     String commentId;
-    List<CommentTreeNode> children;
+    List<CommentTree> children;
     LocalDateTime createDate;
     LocalDateTime modifiedDate;
     String comment;

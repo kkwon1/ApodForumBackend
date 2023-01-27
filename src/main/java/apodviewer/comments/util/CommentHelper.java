@@ -1,7 +1,7 @@
 package apodviewer.comments.util;
 
-import apodviewer.comments.db.CommentsClient;
-import apodviewer.comments.model.CommentTreeNode;
+import apodviewer.comments.db.CommentsDao;
+import apodviewer.comments.model.CommentTree;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,22 +15,22 @@ import java.util.Queue;
 public class CommentHelper {
 
     @Autowired
-    private final CommentsClient commentsClient;
+    private final CommentsDao commentsDao;
 
     public int getCommentCount(String postId) {
-        CommentTreeNode commentTreeNode = commentsClient.getAllComments(postId);
-        List<CommentTreeNode> topLevelComments = commentTreeNode.getChildren();
+        CommentTree commentTree = commentsDao.getPostComments(postId);
+        List<CommentTree> topLevelComments = commentTree.getChildren();
 
         int totalNumberOfComments = 0;
-        Queue<CommentTreeNode> queue = new LinkedList<>();
+        Queue<CommentTree> queue = new LinkedList<>();
         if (!topLevelComments.isEmpty()) {
             queue.addAll(topLevelComments);
             totalNumberOfComments = queue.size();
         }
 
         while (!queue.isEmpty()) {
-            CommentTreeNode node = queue.poll();
-            List<CommentTreeNode> children = node.getChildren();
+            CommentTree node = queue.poll();
+            List<CommentTree> children = node.getChildren();
             totalNumberOfComments += children.size();
             queue.addAll(children);
         }

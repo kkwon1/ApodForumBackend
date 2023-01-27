@@ -1,7 +1,7 @@
 package apodviewer.comments.util;
 
-import apodviewer.comments.db.CommentsClient;
-import apodviewer.comments.model.CommentTreeNode;
+import apodviewer.comments.db.CommentsDao;
+import apodviewer.comments.model.CommentTree;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,24 +17,24 @@ import static org.mockito.Mockito.when;
 public class CommentHelperTest {
 
     @Mock
-    private CommentsClient mockCommentsClient;
+    private CommentsDao mockCommentsDao;
 
     private CommentHelper commentHelper;
 
     @Before
     public void setup(){
-        commentHelper = new CommentHelper(mockCommentsClient);
+        commentHelper = new CommentHelper(mockCommentsDao);
     }
 
     @Test
     public void testGetCommentCountRootOnly() {
-        CommentTreeNode testTreeNode = CommentTreeNode.builder()
+        CommentTree testTreeNode = CommentTree.builder()
                 .commentId("testPost")
                 .comment("rootComment")
                 .children(List.of())
                 .build();
 
-        when(mockCommentsClient.getAllComments("testPost")).thenReturn(testTreeNode);
+        when(mockCommentsDao.getPostComments("testPost")).thenReturn(testTreeNode);
 
         int actualCount = commentHelper.getCommentCount("testPost");
 
@@ -43,13 +43,13 @@ public class CommentHelperTest {
 
     @Test
     public void testGetCommentCountChildren() {
-        CommentTreeNode testTreeNode = CommentTreeNode.builder()
+        CommentTree testTreeNode = CommentTree.builder()
                 .commentId("testPost")
                 .comment("rootComment")
                 .children(List.of(getCommentTreeNode(List.of()), getCommentTreeNode(List.of()), getCommentTreeNode(List.of())))
                 .build();
 
-        when(mockCommentsClient.getAllComments("testPost")).thenReturn(testTreeNode);
+        when(mockCommentsDao.getPostComments("testPost")).thenReturn(testTreeNode);
 
         int actualCount = commentHelper.getCommentCount("testPost");
 
@@ -58,14 +58,14 @@ public class CommentHelperTest {
 
     @Test
     public void testGetCommentCountNestedChildren() {
-        List<CommentTreeNode> testChildren = List.of(getCommentTreeNode(List.of()), getCommentTreeNode(List.of()), getCommentTreeNode(List.of()));
-        CommentTreeNode testTreeNode = CommentTreeNode.builder()
+        List<CommentTree> testChildren = List.of(getCommentTreeNode(List.of()), getCommentTreeNode(List.of()), getCommentTreeNode(List.of()));
+        CommentTree testTreeNode = CommentTree.builder()
                 .commentId("testPost")
                 .comment("rootComment")
                 .children(List.of(getCommentTreeNode(testChildren), getCommentTreeNode(testChildren), getCommentTreeNode(testChildren)))
                 .build();
 
-        when(mockCommentsClient.getAllComments("testPost")).thenReturn(testTreeNode);
+        when(mockCommentsDao.getPostComments("testPost")).thenReturn(testTreeNode);
 
         int actualCount = commentHelper.getCommentCount("testPost");
 
@@ -74,19 +74,19 @@ public class CommentHelperTest {
 
     @Test
     public void testGetCommentCountDeepNestedChildren() {
-        CommentTreeNode testTreeNode = CommentTreeNode.builder()
+        CommentTree testTreeNode = CommentTree.builder()
                 .commentId("testPost")
                 .comment("rootComment")
-                .children(List.of(CommentTreeNode.builder()
+                .children(List.of(CommentTree.builder()
                         .commentId("child")
                         .comment("text")
-                        .children(List.of(CommentTreeNode.builder()
+                        .children(List.of(CommentTree.builder()
                                 .commentId("child")
                                 .comment("text")
-                                .children(List.of(CommentTreeNode.builder()
+                                .children(List.of(CommentTree.builder()
                                         .commentId("child")
                                         .comment("text")
-                                        .children(List.of(CommentTreeNode.builder()
+                                        .children(List.of(CommentTree.builder()
                                                 .commentId("child")
                                                 .comment("text")
                                                 .children(List.of())
@@ -96,15 +96,15 @@ public class CommentHelperTest {
                         .build()))
                 .build();
 
-        when(mockCommentsClient.getAllComments("testPost")).thenReturn(testTreeNode);
+        when(mockCommentsDao.getPostComments("testPost")).thenReturn(testTreeNode);
 
         int actualCount = commentHelper.getCommentCount("testPost");
 
         assertEquals(4, actualCount);
     }
 
-    private CommentTreeNode getCommentTreeNode(List<CommentTreeNode> children) {
-        return CommentTreeNode.builder()
+    private CommentTree getCommentTreeNode(List<CommentTree> children) {
+        return CommentTree.builder()
                 .commentId("someId")
                 .comment("someComment")
                 .children(children)

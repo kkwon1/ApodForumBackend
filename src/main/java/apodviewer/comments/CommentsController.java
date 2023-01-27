@@ -1,9 +1,10 @@
 package apodviewer.comments;
 
-import apodviewer.comments.db.CommentsClient;
+import apodviewer.apod.client.ApodClient;
+import apodviewer.comments.client.CommentsClient;
 import apodviewer.comments.model.AddCommentRequest;
-import apodviewer.comments.model.CommentPointerNode;
-import apodviewer.comments.model.CommentTreeNode;
+import apodviewer.comments.model.Comment;
+import apodviewer.comments.model.CommentTree;
 import apodviewer.comments.model.DeleteCommentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,18 +17,23 @@ public class CommentsController {
     @Autowired
     private CommentsClient commentsClient;
 
+    @Autowired
+    private ApodClient apodClient;
+
     @PostMapping(path = COMMENT_PATH + "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CommentPointerNode addComment(@RequestBody AddCommentRequest addCommentRequest) {
-        return commentsClient.addComment(addCommentRequest);
+    public Comment addComment(@RequestBody AddCommentRequest addCommentRequest) {
+        Comment comment = commentsClient.addComment(addCommentRequest);
+        apodClient.addCommentToPost(addCommentRequest.getPostId());
+        return comment;
     }
 
     @PostMapping(path = COMMENT_PATH + "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteComment(@RequestBody DeleteCommentRequest deleteCommentRequest) {
-        return commentsClient.deleteComment(deleteCommentRequest);
+        return commentsClient.softDeleteComment(deleteCommentRequest);
     }
 
     @GetMapping(path = COMMENT_PATH, params = {"post_id"})
-    public CommentTreeNode getAllComments(@RequestParam String post_id) {
-        return commentsClient.getAllComments(post_id);
+    public CommentTree getPostComments(@RequestParam String post_id) {
+        return commentsClient.getPostComments(post_id);
     }
 }

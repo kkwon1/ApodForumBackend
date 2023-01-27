@@ -1,7 +1,7 @@
 package apodviewer.comments.db;
 
-import apodviewer.comments.model.CommentPointerNode;
-import apodviewer.comments.model.CommentTreeNode;
+import apodviewer.comments.model.Comment;
+import apodviewer.comments.model.CommentTree;
 import org.bson.Document;
 
 import java.time.LocalDateTime;
@@ -11,22 +11,22 @@ import java.util.List;
 
 public class MongoCommentNodeConverter {
 
-    public Document convertCommentNodeToDocument(CommentPointerNode commentNode) {
+    public Document convertCommentToDocument(Comment comment) {
         return new Document()
-            .append("commentId", commentNode.getCommentId())
-            .append("comment", commentNode.getComment())
-            .append("parentId", commentNode.getParentCommentId())
-            .append("createDate", commentNode.getCreateDate())
-            .append("modifiedDate", commentNode.getModifiedDate())
-            .append("author", commentNode.getAuthor())
-            .append("isDeleted", commentNode.getIsDeleted());
+            .append("commentId", comment.getCommentId())
+            .append("commentText", comment.getCommentText())
+            .append("parentId", comment.getParentCommentId())
+            .append("createDate", comment.getCreateDate())
+            .append("modifiedDate", comment.getModifiedDate())
+            .append("author", comment.getAuthor())
+            .append("isDeleted", comment.getIsDeleted());
     }
 
-    public CommentPointerNode convertDocumentToCommentPointerNode(Document document) {
-        return CommentPointerNode.builder()
+    public Comment convertDocumentToComment(Document document) {
+        return Comment.builder()
                 .commentId(document.getString("commentId"))
                 .parentCommentId(document.getString("parentId"))
-                .comment(document.getString("comment"))
+                .commentText(document.getString("commentText"))
                 .createDate(convertToLocalDateTimeViaInstant(document.getDate("createDate")))
                 .modifiedDate(convertToLocalDateTimeViaInstant(document.getDate("modifiedDate")))
                 .author(document.getString("author"))
@@ -34,11 +34,11 @@ public class MongoCommentNodeConverter {
                 .build();
     }
 
-    public CommentTreeNode convertDocumentToCommentTreeNode(Document document) {
-        return CommentTreeNode.builder()
+    public CommentTree convertDocumentToCommentTree(Document document) {
+        return CommentTree.builder()
                 .commentId(document.getString("commentId"))
                 .children(List.of())
-                .comment(document.getString("comment"))
+                .comment(document.getString("commentText"))
                 .createDate(convertToLocalDateTimeViaInstant(document.getDate("createDate")))
                 .modifiedDate(convertToLocalDateTimeViaInstant(document.getDate("modifiedDate")))
                 .author(document.getString("author"))
@@ -46,15 +46,15 @@ public class MongoCommentNodeConverter {
                 .build();
     }
 
-    public CommentTreeNode convertPointerNodeToTreeNode(CommentPointerNode ptrNode) {
-        return CommentTreeNode.builder()
-                .commentId(ptrNode.getCommentId())
+    public CommentTree convertCommentToTree(Comment comment) {
+        return CommentTree.builder()
+                .commentId(comment.getCommentId())
                 .children(List.of())
-                .comment(ptrNode.getComment())
-                .createDate(ptrNode.getCreateDate())
-                .modifiedDate(ptrNode.getModifiedDate())
-                .author(ptrNode.getAuthor())
-                .isDeleted(ptrNode.getIsDeleted())
+                .comment(comment.getCommentText())
+                .createDate(comment.getCreateDate())
+                .modifiedDate(comment.getModifiedDate())
+                .author(comment.getAuthor())
+                .isDeleted(comment.getIsDeleted())
                 .build();
     }
 

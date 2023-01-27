@@ -1,7 +1,7 @@
 package apodviewer.posts;
 
 import apodviewer.apod.model.NasaApod;
-import apodviewer.comments.model.CommentTreeNode;
+import apodviewer.comments.model.CommentTree;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,5 +9,5 @@ import lombok.Data;
 @Data
 public class ApodPost {
     NasaApod nasaApod;
-    CommentTreeNode comments;
+    CommentTree comments;
 }
