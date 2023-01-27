@@ -1,6 +1,5 @@
 package apodviewer.comments.db;
 
-import apodviewer.comments.model.AddCommentRequest;
 import apodviewer.comments.model.Comment;
 import apodviewer.comments.model.CommentTree;
 import com.mongodb.BasicDBObject;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
 
