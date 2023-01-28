@@ -48,10 +48,11 @@ mvn spring-boot:run
 ```
 
 ### Docker
-To run this service on Docker, run the following command from the root directory of project. The service should run on port `8082`.
+To run this service on Docker, run the following commands from the root directory of project. The service should run on port `8082`.
 
 ```
-docker-compose up
+> mvn package
+> docker-compose up
 ```
 
 Once the container is running, you can ssh into the container by using the command
