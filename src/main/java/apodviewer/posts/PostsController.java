@@ -4,10 +4,11 @@ import apodviewer.apod.client.ApodClient;
 import apodviewer.apod.model.NasaApod;
 import apodviewer.comments.client.CommentsClient;
 import apodviewer.comments.model.CommentTree;
+import apodviewer.posts.client.PostUpvoteClient;
+import apodviewer.posts.model.UpvotePostRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PostsController {
@@ -18,6 +19,9 @@ public class PostsController {
 
     @Autowired
     private CommentsClient commentsClient;
+
+    @Autowired
+    private PostUpvoteClient upvoteClient;
 
     @GetMapping(value = POST_PATH, params = {"post_id"})
     public ApodPost getPost(@RequestParam String post_id) {
@@ -30,4 +34,10 @@ public class PostsController {
                 .build();
     }
 
+    @PostMapping(path = POST_PATH + "/upvote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void upvote(@RequestBody UpvotePostRequest upvotePostRequest) {
+        System.out.println("Received Request");
+        upvoteClient.upvotePost(upvotePostRequest);
+        apodClient.upvotePost(upvotePostRequest.getPostId());
+    }
 }

@@ -70,6 +70,11 @@ public class ApodClientImpl implements ApodClient {
     }
 
     @Override
+    public void upvotePost(String postId) {
+        apodDao.incrementUpvoteCount(postId);
+    }
+
+    @Override
     public NasaApod getApod(String postId) {
         NasaApod apod = apodDao.getApod(postId);
         apodPostCache.put(apod.getDate(), apod);

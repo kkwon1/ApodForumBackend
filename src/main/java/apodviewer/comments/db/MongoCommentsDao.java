@@ -81,6 +81,6 @@ public class MongoCommentsDao implements CommentsDao {
     }
 
     private boolean hasChildren(CommentTree node) {
-        return node.getIsLeaf() != null && node.getIsLeaf();
+        return node.getIsLeaf() != null && !node.getIsLeaf();
     }
 }

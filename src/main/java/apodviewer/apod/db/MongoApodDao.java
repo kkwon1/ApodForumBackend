@@ -105,6 +105,16 @@ public class MongoApodDao implements ApodDao {
         apodCollection.updateOne(query, updates, options);
     }
 
+    @Override
+    public void incrementUpvoteCount(String postId) {
+        // Update upvote count for the APOD
+        Bson query = eq("date", postId);
+        Bson updates = Updates.inc("upvoteCount", 1);
+        UpdateOptions options = new UpdateOptions().upsert(true);
+
+        apodCollection.updateOne(query, updates, options);
+    }
+
     private List<NasaApod> buildResults(MongoCursor<Document> cursor) {
         List<NasaApod> results = new ArrayList<>();
         while (cursor.hasNext()) {

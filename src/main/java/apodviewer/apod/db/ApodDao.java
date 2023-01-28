@@ -17,4 +17,6 @@ public interface ApodDao {
     List<NasaApod> getRandomApods(Integer count);
 
     void incrementCommentCount(String postId);
+
+    void incrementUpvoteCount(String postId);
 }

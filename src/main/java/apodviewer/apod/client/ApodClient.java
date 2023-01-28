@@ -16,4 +16,6 @@ public interface ApodClient {
     List<NasaApod> getRandomApods(Integer count);
 
     void addCommentToPost(String postId);
+
+    void upvotePost(String postId);
 }

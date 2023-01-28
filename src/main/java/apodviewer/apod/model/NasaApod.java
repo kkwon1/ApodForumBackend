@@ -15,7 +15,7 @@ public class NasaApod {
     String title;
     String url;
     String hdurl;
-    int likeCount;
+    int upvoteCount;
     int saveCount;
     int commentCount;
 }
