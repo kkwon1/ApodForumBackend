@@ -1,6 +1,7 @@
 package apodviewer.auth;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
@@ -14,6 +15,7 @@ import static apodviewer.EnvironmentVariables.JWT_ISSUER;
 /**
  * Configures our application with Spring Security to restrict access to our API endpoints.
  */
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
@@ -23,12 +25,15 @@ public class SecurityConfig {
         This is where we configure the security required for our endpoints and setup our app to serve as
         an OAuth2 Resource Server, using JWT validation.
         */
-        http.authorizeRequests()
+        http.csrf().disable()
+                .authorizeRequests()
                 .mvcMatchers("/apod").permitAll()
                 .mvcMatchers("/post").permitAll()
+                .mvcMatchers("/post/upvote").authenticated()
                 .mvcMatchers("/comment").authenticated()
                 .and().cors()
                 .and().oauth2ResourceServer().jwt();
+
         return http.build();
     }
 
