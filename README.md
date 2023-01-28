@@ -26,13 +26,70 @@ I've been working with Java professionally for years and felt it was the easiest
 Once the base functionality of the service is fleshed out, I may re-write this in a different language that I want to learn
 
 ## Running the Service
-TODO
+
+### Prerequisites
+This application uses Maven for the build tool, so please install from [here](https://maven.apache.org/install.html)
+
+This project is using Java 17. I personally installed it from [Amazon Corretto](https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/downloads-list.html)
+
+#### Windows Environment Variables
+I'm developing on Windows (unfortunately), and you will need to set the appropriate environment variables to ensure these commands will work.
+Namely, you will need to set JAVA_HOME and Path variables to point to the correct directories.
+
+#### .env
+The project also loads from a `.env` file, which specifies the NASA API Key, MongoDB endpoint, Auth0 token issuer, etc...
+To run this project, you must set valid values for these.
 
 ### Locally
-TODO
+To run this service locally, run the following command from the root directory of project. The service should run on port `8082`.
+
+```
+mvn spring-boot:run
+```
+
+### Docker
+To run this service on Docker, run the following command from the root directory of project. The service should run on port `8082`.
+
+```
+docker-compose up
+```
+
+Once the container is running, you can ssh into the container by using the command
+
+```
+docker exec -it <CONTAINER_NAME> sh
+```
 
 ## Testing
+To run the full test suite
+
+```
+mvn test
+```
+
+To run a single test file
+
+```
+mvn -DTest=<TestClassName> test
+```
+
+To run multiple specified test files
+
+```
+mvn -Dtest=<TestClassName1>,<TestClassName2> test
+```
+
+To run a single unit test from a single file
+
+```
+mvn -Dtest=<TestClassName>#<TestMethodName> test
+```
+
+## Integration Tests
 TODO
 
 ## API Guide
-TODO
+
+### Unauthenticated APIs
+
+#### APOD
