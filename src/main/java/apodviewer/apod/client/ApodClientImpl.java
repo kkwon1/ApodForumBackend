@@ -72,6 +72,7 @@ public class ApodClientImpl implements ApodClient {
     @Override
     public void upvotePost(String postId) {
         apodDao.incrementUpvoteCount(postId);
+        apodPostCache.invalidate(postId);
     }
 
     @Override
