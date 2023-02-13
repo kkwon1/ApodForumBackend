@@ -53,6 +53,7 @@ public class CommentsClientImpl implements CommentsClient {
                 .build();
 
         commentsDao.addComment(newComment);
+        commentTreeCache.invalidate(addCommentRequest.getPostId());
         return newComment;
     }
 
