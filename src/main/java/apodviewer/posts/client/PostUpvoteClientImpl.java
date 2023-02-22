@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class PostUpvoteClientImpl implements PostUpvoteClient {
@@ -23,5 +24,10 @@ public class PostUpvoteClientImpl implements PostUpvoteClient {
                 .build();
 
         postUpvoteDao.upvotePost(upvote);
+    }
+
+    @Override
+    public List<String> getUpvotedPostIds(String userSub) {
+        return postUpvoteDao.getUpvotedPostIds(userSub);
     }
 }
