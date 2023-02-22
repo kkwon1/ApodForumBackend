@@ -3,6 +3,8 @@ package apodviewer.user.model;
 import lombok.Builder;
 import lombok.Value;
 
+import java.util.List;
+
 @Value
 @Builder
 public class User {
@@ -11,4 +13,5 @@ public class User {
     String email;
     boolean emailVerified;
     String profilePictureUrl;
+    List<String> upvotedPostIds;
 }

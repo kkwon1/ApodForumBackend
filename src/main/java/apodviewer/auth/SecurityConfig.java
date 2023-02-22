@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .mvcMatchers("/apod").permitAll()
                 .mvcMatchers("/post").permitAll()
                 .mvcMatchers("/post/upvote").authenticated()
+                .mvcMatchers("/user").authenticated()
                 .mvcMatchers("/comment").authenticated()
                 .and().cors()
                 .and().oauth2ResourceServer().jwt();
