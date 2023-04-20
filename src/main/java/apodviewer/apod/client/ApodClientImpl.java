@@ -52,6 +52,7 @@ public class ApodClientImpl implements ApodClient {
     @Override
     public List<NasaApod> searchApod(String searchString) {
         return apodDao.getAllApod().stream()
+                .filter(apod -> apod.getDate() != null && apod.getExplanation() != null)
                 .peek(apod -> apodPostCache.put(apod.getDate(), apod))
                 .filter(apod -> StringUtils.containsIgnoreCase(apod.getExplanation(), searchString))
                 .collect(Collectors.toList());
@@ -60,6 +61,7 @@ public class ApodClientImpl implements ApodClient {
     @Override
     public List<NasaApod> getRandomApods(Integer count) {
         return apodDao.getRandomApods(count).stream()
+                .filter(apod -> apod.getDate() != null)
                 .peek(apod -> apodPostCache.put(apod.getDate(), apod))
                 .collect(Collectors.toList());
     }
