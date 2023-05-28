@@ -87,7 +87,15 @@ mvn -Dtest=<TestClassName>#<TestMethodName> test
 ```
 
 ## Integration Tests
-TODO
+To run only integration tests
+```
+mvn integration-test
+```
+
+To run the full suite of unit and integration tests
+```
+mvn verify
+```
 
 ## API Guide
 

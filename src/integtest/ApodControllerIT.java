@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = Main.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApodControllerTest {
+public class ApodControllerIT {
     @LocalServerPort
     private int port;
 
@@ -44,10 +44,5 @@ public class ApodControllerTest {
         assertThat(actualApod)
                 .usingRecursiveComparison()
                 .isEqualTo(expectedNasaApod);
-    }
-
-    @Test
-    public void testGetRandomApods() {
-
     }
 }

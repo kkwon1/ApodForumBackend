@@ -3,9 +3,9 @@ package apodviewer.apod.db;
 import apodviewer.apod.model.NasaApod;
 import org.bson.Document;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class MongoConverterTest {
+public class MongoApodConverterTest {
     private final MongoApodConverter mongoApodConverter = new MongoApodConverter();
 
     @Test
