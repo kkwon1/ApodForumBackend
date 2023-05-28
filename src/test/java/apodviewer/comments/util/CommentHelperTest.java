@@ -2,18 +2,19 @@ package apodviewer.comments.util;
 
 import apodviewer.comments.db.CommentsDao;
 import apodviewer.comments.model.CommentTree;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+
 public class CommentHelperTest {
 
     @Mock
@@ -21,7 +22,7 @@ public class CommentHelperTest {
 
     private CommentHelper commentHelper;
 
-    @Before
+    @BeforeEach
     public void setup(){
         commentHelper = new CommentHelper(mockCommentsDao);
     }
